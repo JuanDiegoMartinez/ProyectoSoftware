@@ -17,11 +17,14 @@ class CrearCuestionario extends React.Component {
         var contenedor = document.getElementById("preguntas");
         var numHijo = contenedor.children.length + 1;
         var nuevoDiv = document.createElement("div");
+        nuevoDiv.className = "pregunta";
         
         // Crear texto con numero de pregunta
+        nuevoDiv.appendChild(document.createElement("br"));
         nuevoDiv.appendChild(document.createTextNode("Pregunta " + numHijo + ": "));
 
-        // Salto de linea
+        // Dos saltos de linea
+        nuevoDiv.appendChild(document.createElement("br"));
         nuevoDiv.appendChild(document.createElement("br"));
 
         // Crear un nuevo <input> para la pregunta
@@ -29,7 +32,8 @@ class CrearCuestionario extends React.Component {
         inPrg.name = "pregunta" + numHijo;
         nuevoDiv.appendChild(inPrg);
 
-        // Salto de linea
+        // Dos saltos de linea
+        nuevoDiv.appendChild(document.createElement("br"));
         nuevoDiv.appendChild(document.createElement("br"));
 
         // Crear 4 nuevos <input> de tipo texto y de tipo radio para las respuestas
@@ -44,6 +48,19 @@ class CrearCuestionario extends React.Component {
             inRsp.name = "respuesta" + numHijo + "" + i;
             nuevoDiv.appendChild(inRsp);
         }
+
+        // Dos saltos de linea
+        nuevoDiv.appendChild(document.createElement("br"));
+        nuevoDiv.appendChild(document.createElement("br"));
+
+        // Crear un <input> de tipo texto para el tiempo de pregunta
+        nuevoDiv.appendChild(document.createTextNode("Tiempo: "));
+        nuevoDiv.appendChild(document.createElement("br"));
+        var inTmp = document.createElement("input");
+        inTmp.type = "text";
+        inTmp.name = "tiempo" + numHijo;
+        inTmp.className = "tiempo";
+        nuevoDiv.appendChild(inTmp);
 
         // Dos saltos de linea
         nuevoDiv.appendChild(document.createElement("br"));
@@ -71,8 +88,8 @@ class CrearCuestionario extends React.Component {
                     <p> Asignatura: <input id="Asignatura" type="text" /> </p>
                     <p> Preguntas: </p><br/>
                     <div id="preguntas"> </div>
-                    <p> <button name="NuevaPreg" type="button" onClick={() => this.anyadirPregunta()}> + </button> </p>
-                    <p> <button name="EliminarPreg" type="button" onClick={() => this.eliminarPregunta()}> - </button> </p>
+                    <p> <button name="NuevaPreg" type="button" onClick={() => this.anyadirPregunta()}> + </button> 
+                    <button name="EliminarPreg" type="button" onClick={() => this.eliminarPregunta()}> - </button> </p>
                     <p> <button name="Guardar" type="button" onClick={() => this.pasar()}> Enviar </button> </p>
                 </form>
 

@@ -1,0 +1,52 @@
+body {
+    background-color: #1E1E1E;
+    color: #CBBA5F;
+    padding: 40px;
+    font-family: 'Calibri';
+    text-align: center;
+}
+
+a {
+    color: #CBBA5F;
+}
+
+th {
+    color: #D4D4C9;
+}
+
+td {
+    color: #D4D4C9;
+}
+
+input {
+    background-color: #707070;
+    border: 2px solid rgb(160, 160, 160);
+    border-radius: 4px;
+    color: #D4D4C9;
+}
+
+button {
+    background-color: #707070;
+    border: 2px solid #707070;
+    border-radius: 2px;
+    color: #D4D4C9;
+}
+
+textarea {
+    background-color: #707070;
+    border: 2px solid rgb(160, 160, 160);
+    border-radius: 4px;
+    color: #D4D4C9;
+}
+
+.tiempo {
+    width: 5%;
+}
+
+.pregunta {
+    border: 1px solid rgb(160, 160, 160);
+    border-radius: 2px;
+    margin: 0px 5px 5px 0px;
+    padding: 0px 5px 5px 0px;
+    float: center;
+}
