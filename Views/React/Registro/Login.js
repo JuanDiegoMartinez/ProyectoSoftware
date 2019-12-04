@@ -1,16 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../Global.css';
+import login from '../../../Controllers/Clogin';
 
 class Login extends React.Component {
-
-    pasar() {
-        var u = document.getElementById("Usuario").value;
-        var p = document.getElementById("Password").value;
-
-        console.log(u);
-        console.log(p);
-    }
 
     render() {
         return(
@@ -21,7 +14,7 @@ class Login extends React.Component {
                 <form align="center">
                     <p> Usuario: <input id="Usuario" type="text" /> </p>
                     <p> Contraseña: <input id="Password" type="password" /> </p>
-                    <p> <button name="Enviar" type="button"> Enviar </button> </p>
+                    <p> <button name="Enviar" type="submit" onClick={ () => login()}> Enviar </button> </p>
                 </form>
 
                 <p> <Link to="/Register"> ¿Aún no tienes una cuenta? </Link> </p>
