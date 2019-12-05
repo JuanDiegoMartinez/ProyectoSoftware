@@ -5,9 +5,15 @@ import ElegirSala from './Alumno/ElegirSala';
 import Cuestionarios from './Profesor/Cuestionarios';
 import CrearCuestionario from './Profesor/CrearCuestionario';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import io from 'socket.io-client';
 
 class App extends React.Component {
   
+  componentDidMount() {
+    this.socket = io.connect('/');
+  }
+
+
   render() {
     return (
       <BrowserRouter>
