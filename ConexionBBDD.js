@@ -5,9 +5,7 @@ let db = new sqlite3.Database('./database.db', sqlite3.OPEN_READWRITE, (err) => 
       console.error(err.message);
     }
     console.log('Connected to the database.');
-  });
-
-let insert = `insert into tabla values(80,'djdj')`;
+});
 
 let obtenerUsuarios = function() {
   db.all(`SELECT * FROM usuarios`, [], (err, rows) => {
@@ -23,17 +21,6 @@ let obtenerUsuarios = function() {
 let cerrarBBDD = function() {
   db.close();
 }
-
-// insert one row into the langs table
-/*
-db.run(insert, [], function(err) {
-  if (err) {
-    return console.log(err.message);
-  }
-  // get the last insert id
-  console.log(`A row has been inserted`);
-});
-*/
 
 let obtenerCuestionarios = function() {
 
