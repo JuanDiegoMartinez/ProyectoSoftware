@@ -1,6 +1,7 @@
 var path = require('path');
 
 module.exports = {
+    mode: "development",
     entry: ["@babel/polyfill", __dirname + '/Views/React/Index.js'],
     output: {
         path: '/',
