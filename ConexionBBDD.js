@@ -7,28 +7,33 @@ let db = new sqlite3.Database('./database.db', sqlite3.OPEN_READWRITE, (err) => 
     console.log('Connected to the database.');
   });
 
-let sql = `SELECT id iden, texto a FROM tabla`;
-
 let insert = `insert into tabla values(80,'djdj')`;
- 
-db.all(sql, [], (err, rows) => {
-  if (err) {
-    throw err;
-  }
-  rows.forEach((row) => {
-    console.log(row.iden, row.a);
-  });
-});
 
-  // insert one row into the langs table
-  db.run(insert, [], function(err) {
+let obtenerUsuarios = function() {
+  db.all(`SELECT * FROM usuarios`, [], (err, rows) => {
     if (err) {
-      return console.log(err.message);
+      throw err;
     }
-    // get the last insert id
-    console.log(`A row has been inserted`);
+    rows.forEach((row) => {
+      console.log(row.id_user, row.nombre);
+    });
   });
+}
 
-db.close();
+let cerrarBBDD = function() {
+  db.close();
+}
 
-export default db;
+// insert one row into the langs table
+/*
+db.run(insert, [], function(err) {
+  if (err) {
+    return console.log(err.message);
+  }
+  // get the last insert id
+  console.log(`A row has been inserted`);
+});
+*/
+
+exports.obtenerUsuarios = obtenerUsuarios;
+exports.cerrarBBDD = cerrarBBDD;
