@@ -26,8 +26,6 @@ io.on('connection', socket => {
 
 server.listen(4000, () => {
     console.log('server on port 4000');
-
-    let sql = `SELECT id_user id, nombre nom FROM usuarios`;
 });
 
 process.on('exit', db.cerrarBBDD);
@@ -49,6 +47,3 @@ app.post('/api/readuser', (req, res) => {
     `I received your POST request. This is what you sent me: User=${req.body.postUser} and Password=${req.body.postPass}`,
   );
 });
-
-//const port = process.env.PORT || 5000;
-//app.listen(port, () => console.log(`Listening on port ${port}`));

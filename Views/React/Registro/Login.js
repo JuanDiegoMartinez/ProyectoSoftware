@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import socket from 'socket.io-client';
 
 class Login extends React.Component {
 
@@ -14,6 +15,8 @@ class Login extends React.Component {
         this.callApi()
             .then(res => this.setState({ response: res.express }))
             .catch(err => console.log(err));
+        
+        this.socket = socket.connect('/');
     }
       
     callApi = async () => {
