@@ -16,7 +16,7 @@ class Login extends React.Component {
             .then(res => this.setState({ response: res.express }))
             .catch(err => console.log(err));
         
-        this.socket = socket.connect('/');
+        //this.socket = socket.connect('/');
     }
       
     callApi = async () => {

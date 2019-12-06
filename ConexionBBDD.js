@@ -35,5 +35,20 @@ db.run(insert, [], function(err) {
 });
 */
 
+let obtenerCuestionarios = function() {
+
+  var cuestionarios;
+
+  db.all(`SELECT * FROM cuestionarios WHERE LOWER(nombre_usu) = LOWER("david")`, [], (err,rows) => {
+    if (err) {
+      throw err;
+    }
+    cuestionarios = rows; 
+  });
+
+  return cuestionarios;
+}
+
 exports.obtenerUsuarios = obtenerUsuarios;
 exports.cerrarBBDD = cerrarBBDD;
+exports.obtenerCuestionarios = obtenerCuestionarios;

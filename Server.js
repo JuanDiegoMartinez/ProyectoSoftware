@@ -22,13 +22,15 @@ app.use(express.static(path.join(__dirname, 'Views')));
 
 io.on('connection', socket => {
     console.log('socket connected: ', socket.id);
+
+    socket.on('hola', (data) => {
+      console.log(data);
+    });
 });
 
 server.listen(4000, () => {
     console.log('server on port 4000');
 });
-
-process.on('exit', db.cerrarBBDD);
 
 db.obtenerUsuarios();
 
