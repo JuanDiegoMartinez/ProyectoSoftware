@@ -1,5 +1,5 @@
 // Librerias
-const db = require('./ConexionBBDD');
+const db = require('./BBDD/ConexionBBDD');
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
@@ -17,7 +17,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
-// Middleware
+// Middleware webpack para poder utilizar react
 app.use(webpackDevMiddleware(webpack(config)));
 
 // Decirle a express donde se encuentran las vistas

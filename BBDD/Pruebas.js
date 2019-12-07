@@ -1,12 +1,14 @@
-const db = require('./ConexionBBDD');
+//const db = require('./ConexionBBDD');
+const usuarios = require('./QuerysUsuarios');
 
+/*
 // Prueba insertar cuestionario
 var datos = ['david', 1, 'hola', 'diseño'];
 db.insertarCuestionario(datos);
 
 // Prueba obtener cuestionario
-//usuario = 'david';
-//db.obtenerCuestionarios(usuario);
+usuario = 'david';
+db.obtenerCuestionarios(usuario);
 
 // Prueba insertar pregunta
 datos = [1,1,'hehehe', 'kadsfjs', 2];
@@ -19,7 +21,7 @@ db.insertarPregunta(datos);
 datos = 1;
 db.eliminarCuestionario(datos);
 
-/*
+
 // Prueba obtener preguntas
 db.obtenerPreguntas(1);
 
@@ -31,3 +33,12 @@ db.eliminarPregunta(datos);
 datos = ['adios', 'lala', 2, 1, 2];
 db.updatePregunta(datos);
 */
+//var hola = db.db;
+
+var heh = usuarios.datosUsuario('david');
+console.log(heh);
+console.log(heh);
+console.log(heh);
+console.log(heh);
+console.log(heh);
+console.log(heh);
