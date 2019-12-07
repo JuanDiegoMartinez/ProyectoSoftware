@@ -1,5 +1,4 @@
 // Librerias
-const db = require('./BBDD/ConexionBBDD');
 const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
@@ -52,8 +51,12 @@ app.get('/session', (req,res) => {
   //console.log(req.session.id);
 });
 
+const usuarios = require('./BBDD/QuerysUsuarios');
+
 app.get('/api/hello', (req, res) => {
-  res.send({ express: 'GET test successful. Submit to verify the POST test.' });
+  var a = usuarios.datosUsuario('david');
+  console.log('hola ', String(a));
+  res.send({ express: 'hola' });
 });
 
 // test para leer la respuesta, esto en un futuro hara un acceso a la bbdd y devolvera la respuesta
@@ -65,6 +68,4 @@ app.post('/api/readuser', (req, res) => {
   req.session.user = req.body.postUser;
   req.session.pass = req.body.postPass;
   console.log(req.session, req.session.id);
-
-  
 });

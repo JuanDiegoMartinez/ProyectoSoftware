@@ -45,7 +45,7 @@ let eliminarUsuario = function(datos) {
 // Obtener los datos de un usuario (datos = nombre del usuario)
 let datosUsuario = function(datos) {
 
-    var datosUsu;;
+    var nombre;
 
     DDBB.db.serialize(() => {
         DDBB.db.get(`SELECT * FROM usuarios WHERE LOWER(nombre) = LOWER(?)`, datos, (err, rows) => {
@@ -56,11 +56,12 @@ let datosUsuario = function(datos) {
             console.log(rows);
             console.log(datosUsu);
             console.log(datosUsu.nombre);
-            return rows;
+            nombre = datosUsu.nombre;
+            //return datosUsu.nombre;
         });
     });
 
-    //return datosUsu;
+    //return nombre;
 }
 
 exports.insertarUsuario = insertarUsuario;
