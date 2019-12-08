@@ -1,10 +1,18 @@
 //Función que controla el login del usuario
-function compruebaLogin() {
+async function handleLogin() {
 
-    var u = document.getElementById("Usuario").value;
-    var p = document.getElementById("Password").value;
+    var pass = document.getElementById('Password').value;
+    var usuario = document.getElementById("Usuario").value;
 
-    console.log(u, p);
+    const response = await fetch('/api/readuser', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ postUser: usuario, postPass: pass }),
+    });
+    const body = await response.text();
+    return body;
 }
 
-export default compruebaLogin;
+export default handleLogin;
