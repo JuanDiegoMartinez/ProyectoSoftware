@@ -58,10 +58,15 @@ let datosUsuario = function(datos) {
             console.log(datosUsu.nombre);
             nombre = datosUsu.nombre;
             //return datosUsu.nombre;
+            return hola(rows);
         });
     });
 
     //return nombre;
+}
+
+function hola(rows) {
+    return rows;
 }
 
 exports.insertarUsuario = insertarUsuario;

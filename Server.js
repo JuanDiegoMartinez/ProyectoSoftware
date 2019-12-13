@@ -47,25 +47,15 @@ server.listen(4000, () => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/session', (req,res) => {
-  //console.log(req.session.id);
-});
-
 const usuarios = require('./BBDD/QuerysUsuarios');
 
-app.get('/api/hello', (req, res) => {
-  var a = usuarios.datosUsuario('david');
-  console.log('hola ', String(a));
-  res.send({ express: 'hola' });
-});
-
 // test para leer la respuesta, esto en un futuro hara un acceso a la bbdd y devolvera la respuesta
+
 app.post('/api/readuser', (req, res) => {
-  console.log(req.body);
+  console.log('Toda la request:', req.body);
+  var a = usuarios.datosUsuario('david');
+  console.log('devolución bbdd: ', a);
   res.send(
     `I received your POST request. This is what you sent me: User=${req.body.postUser} and Password=${req.body.postPass}`,
   );
-  req.session.user = req.body.postUser;
-  req.session.pass = req.body.postPass;
-  console.log(req.session, req.session.id);
 });
