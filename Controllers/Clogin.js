@@ -1,15 +1,15 @@
 //Función que controla el login del usuario
 async function handleLogin() {
 
-    var pass = document.getElementById('Password').value;
+    var password = document.getElementById('Password').value;
     var usuario = document.getElementById("Usuario").value;
 
-    const response = await fetch('/api/readuser', {
+    const response = await fetch('/login', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ postUser: usuario, postPass: pass }),
+        body: JSON.stringify({ user: usuario, pass: password }),
     });
     
     const body = await response.text();

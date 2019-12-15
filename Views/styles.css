@@ -50,3 +50,20 @@ textarea {
     padding: 0px 5px 5px 0px;
     float: center;
 }
+
+li {
+    display: inline-block;
+    padding-left: 50px;
+}
+
+nav {
+    width: 1200px;
+    height: 30px;
+    margin: 50px;
+    background: green;
+    text-align: right;
+}
+
+header {
+    margin-top: -75px;
+}

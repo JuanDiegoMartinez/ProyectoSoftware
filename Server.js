@@ -50,12 +50,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const usuarios = require('./BBDD/QuerysUsuarios');
 
 // test para leer la respuesta, esto en un futuro hara un acceso a la bbdd y devolvera la respuesta
-
-app.post('/api/readuser', (req, res) => {
-  console.log('Toda la request:', req.body);
-  var a = usuarios.datosUsuario('david');
-  console.log('devolución bbdd: ', a);
-  res.send(
-    `I received your POST request. This is what you sent me: User=${req.body.postUser} and Password=${req.body.postPass}`,
-  );
+app.post('/login', function(req, res) {
+  var b = usuarios.loginUsuario(req.body);
+  res.send(b);
 });
+
+//Registro del usuario
+app.post('/registro', (req, res) => {
+  console.log('Toda la request: ', req.body);
+  var datos = [req.body.postUser, req.body.postPass, req.body.postEmail];
+  console.log(datos);
+  usuarios.insertarUsuario(datos);
+  res.send('User= ', req.body.postUser, 'Pass= ', req.body.postPass, 'Email= ', req.body.postEmail);
+});
+
+//Modificar datos usuario

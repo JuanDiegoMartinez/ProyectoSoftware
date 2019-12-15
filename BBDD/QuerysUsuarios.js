@@ -15,60 +15,32 @@ let insertarUsuario = function(datos) {
 
 // Modificar un usuario (datos = [password, email, nombre])
 let modificarUsuario = function(datos) {
-
-    DDBB.db.serialize(() => {
-        DDBB.db.run(`UPDATE usuarios SET password = ?, email = ? WHERE nombre = ?`, datos, (err, rows) => {
-            if (err) {
-                throw err;
-            }
-            console.log('Usuario ', datos[2], ' modificado');
-        });
-    });
+    //DDBB.DB().update('usuarios', datos, []
 }
 
 // TODO: este todavía no está terminado
 // Eliminar un usuario (datos = nombre usuario)
 let eliminarUsuario = function(datos) {
 
-    DDBB.db.serialize(() => {
-        DDBB.db.run(`DELETE FROM usuarios WHERE nombre = ?`, datos)
-        .run(`DELETE FROM cuestionarios WHERE nombre_usu = ?`, datos)
-        .run(`DELETE FROM preguntas WHERE id_cues = ?`, [], (err, rows) => {
-          if (err) {
-            throw err;
-          }
-          console.log('Cuestionario borrado: ', rows);
-        });
-      });
 }
 
 // Obtener los datos de un usuario (datos = nombre del usuario)
 let datosUsuario = function(datos) {
-
-    var nombre;
-
-    DDBB.db.serialize(() => {
-        DDBB.db.get(`SELECT * FROM usuarios WHERE LOWER(nombre) = LOWER(?)`, datos, (err, rows) => {
-            if (err) {
-                throw err;
-            }
-            datosUsu = rows;
-            console.log(rows);
-            console.log(datosUsu);
-            console.log(datosUsu.nombre);
-            nombre = datosUsu.nombre;
-            //return datosUsu.nombre;
-            return hola(rows);
-        });
-    });
-
-    //return nombre;
+    return DDBB.DB().queryFirstRow('SELECT * FROM usuarios WHERE LOWER(nombre) = LOWER(?)', datos);
 }
 
-function hola(rows) {
-    return rows;
+// Para hacer login (datos = [nombre, password])
+let loginUsuario = function(datos) {
+    let esta = DDBB.DB().queryFirstRow('SELECT * FROM usuarios WHERE LOWER(nombre) = LOWER(?) AND password = ?', datos.user, datos.pass);
+
+    console.log(esta);
+    if ( esta === undefined) {
+        return false;
+    }
+    return true;
 }
 
 exports.insertarUsuario = insertarUsuario;
 exports.modificarUsuario = modificarUsuario;
 exports.datosUsuario = datosUsuario;
+exports.loginUsuario = loginUsuario;
