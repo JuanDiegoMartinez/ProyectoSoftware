@@ -8,15 +8,12 @@ class Cuestionarios extends React.Component {
         super(props);
 
         this.state = {
-            listaCues: Array(2),
+            listaCues: Array()
         }
     }
-    /*
-    async mostrarCuestionarios() {
+    
+    mostrarCuestionarios() {
         // Obtener los datos de los cuestionarios desde la bbdd
-        var datos = await CCuestionarios.handleData();
-
-        var listaCues = [];
         
         const listaCst = [
             ["Tema 1", "Bases de Datos", 7, <button type="submit" onClick={this.handleSubmit}>Activar</button>],
@@ -24,36 +21,39 @@ class Cuestionarios extends React.Component {
             ["General", "Estructura de computadores", 5],
         ]; // Mock temporal para testear
 
+        var a = ``;
 
-        for (var i = 0; i < 2; i++) {
-            console.log(datos[i].id_cues);
-            console.log(datos[i].nombre_cues);
-            console.log(datos[i].asignatura);
-            listaCues.push({id_cues: datos[i].id_cues, nombre_cues: datos[i].nombre_cues, asignatura: datos[i].asignatura});
-        }
-        console.log(listaCues);
+        listaCst.map(function(item, i) {
+            a += 
+            `<tr key=${i}>
+               <td>${item[0]}</td>
+                <td>${item[1]}</td>
+                <td>${item[2]}</td>
+            </tr>`;
+         });
 
-        this.setState({
-            listaCues: datos,
-        });
+         a = '<p>' + 341234 + '</p>';
+         console.log(a);
 
-        // Generar el código html correspondiente y devolverlo
-        // return (listaCues.map(function(item, i) {
-        //      return (
-        //      <tr key={i}>
-        //          <td>{item[i].id_cues}</td>
-        //          <td>{item[i].nombre_cues}</td>
-        //          <td>{item[i].asignatura}</td>
-        //      </tr>
-        //      )
+         document.getElementById("hehe").innerHTML = a;
+
+
+         //Generar el código html correspondiente y devolverlo
+        //  return (listaCst.map(function(item, i) {
+        //       return (
+        //       `<tr key=${i}>
+        //          <td>${item[0]}</td>
+        //           <td>${item[1]}</td>
+        //           <td>${item[2]}</td>
+        //       </tr>`
+        //       )
         // }));
     }
-    */
-
+    
     async componentDidMount() {
         var datos = await CCuestionarios.handleData();
 
-        console.log('datos: ', datos);
+        console.log('datos: ', datos.length);
         console.log('datos0: ', datos[0]);
         
         this.setState({
@@ -61,50 +61,48 @@ class Cuestionarios extends React.Component {
         });
 
         console.log('state: ', this.state.listaCues);
+        console.log(this.state.listaCues[0].id_cues);
         
-        for (var i = 0; i < 2; i++) {
-            console.log(this.state.listaCues[i].id_cues);
-            console.log(this.state.listaCues[i].nombre_cues);
-            console.log(this.state.listaCues[i].asignatura);
+        var a = `<tr>
+        <th id="id_cues">Id cuestionario</th>
+        <th>Nombre del cuestionario</th>
+        <th>Asignatura</th>
+        <th>Seleccionar</th>
+        </tr>`;
+
+        for (var i = 0; i < datos.length; i++) {
+            a += `<tr>
+                    <td>${this.state.listaCues[i].id_cues}</td> <td>${this.state.listaCues[i].nombre_cues}</td> <td>${this.state.listaCues[i].asignatura}</td>
+                    <td><input type="radio" name="Elegido" value=${i} /> </td>
+            
+            </tr> `;
         }
-
-        this.hola();
+        console.log(a);
+        document.getElementById("hehe").innerHTML = a;
     }
 
-    hola() {
-        console.log('hola: ', this.state.listaCues);
+    handleSubmit = e => {
+        e.preventDefault();
+        var a = document.forms["form"].elements;
+        console.log(a);
 
-        return (this.state.listaCues.map(function(item, i) {
-            return (
-                <tr key={i}>
-                    <td>{item[i].id_cues}</td>
-                    <td>{item[i].nombre_cues}</td>
-                    <td>{item[i].asignatura}</td>
-                </tr>
-            )
-        }));
-    }
+        //hacer un for para saber cual está cheked
 
-    handleSubmit() {
-        var a = document.getElementById('id_cues');
-        a.style.display = "none";
+        //var a = document.getElementById('id_cues');
+        //a.style.display = "none";
     }
 
     render() {
         return(
             <React.Fragment>
+                
                 <div align="center">
                     <h1> Lista de cuestionarios</h1>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <th id="id_cues">Id cuestionario</th>
-                                <th>Nombre del cuestionario</th>
-                                <th>Asignatura</th>
-                                <th>Botones</th>
-                            </tr>
-                        </tbody>
+                    <form id="form" onSubmit={this.handleSubmit}>
+                    <table id="hehe">
                     </table>
+                    <button type="submit"> Aceptar </button>
+                    </form>
                     <p> <Link to="/Profesor/CrearCuestionario"> Crear cuestionario </Link> </p>
                 </div>
             </React.Fragment>

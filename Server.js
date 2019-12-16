@@ -121,7 +121,6 @@ app.post('/eliminar/cuestionario', (req, res) => {
 
 // Listar cuestionarios (req = user)
 app.get('/listar/cuestionarios', (req, res) => {
-  var hehehe = [];
   console.log('Estoy en /listar/cuestionarios: ', req.session.user)
   var cues = cuestionarios.listarCuestionarios(req.session.user);
   console.log('Estoy en /listar/cuestionarios: ', cues);

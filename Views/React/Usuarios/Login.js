@@ -32,6 +32,7 @@ class Login extends React.Component {
         this.props.navigation.navigate(routeName);
     }
 
+    
     hola() {
         
         var u = document.getElementById('Usuario').value;
@@ -40,7 +41,7 @@ class Login extends React.Component {
             user: u,
         });
     }
-
+   
     render() {
         return(
             <React.Fragment>
