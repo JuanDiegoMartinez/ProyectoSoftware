@@ -5,12 +5,12 @@ async function handleRegister() {
     var usuario = document.getElementById("Usuario").value;
     var email = document.getElementById("Email").value;
 
-    const response = await fetch('/registro', {
+    const response = await fetch('/registro/usuario', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ postUser: usuario, postPass: pass, postEmail: email }),
+        body: JSON.stringify({ user: usuario, pass: pass, email: email }),
     });
     
     const body = await response.text();

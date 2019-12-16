@@ -1,33 +1,20 @@
 const DDBB = require('./ConexionBBDD');
 
-// Insertar una pregunta (datos = [id_cues, id_pre, pregunta, respuesta, correcta])
+// Insertar una pregunta (datos = [id_cues, id_pre, pre, resp, correcta])
 let insertarPregunta = function(datos) {
 
-    DDBB.db.serialize(() => {
-      DDBB.db.run(`INSERT INTO preguntas VALUES(?,?,?,?,?)`, datos, (err, rows) => {
-        if (err) {
-          throw err;
-        }
-        console.log('Pregunta insertada: ', rows);
-      });
-    });
-  }
+    DDBB.DB().insert('preguntas', {
+        id_cues: datos.id_cues,
+        id_pre: datos.id_pre,
+        pregunta: datos.pre,
+        respuesta: datos.resp,
+        correcta: datos.correcta
+    })
+}
   
 // Obtener las preguntas de un cuestionario (datos = id_cues)
 let listarPreguntasCuestionario = function(datos) {
-
-    var cuestionario;
-
-    DDBB.db.serialize(() => {
-        DDBB.db.all(`SELECT * FROM preguntas WHERE id_cues = ?`, datos, (err, rows) => {
-        if (err) {
-            throw err;
-        }
-        cuestionario = rows;
-        console.log('Obtener preguntas: ', cuestionario);
-        return rows;
-        });
-    });
+    return DDBB.DB().query('SELECT * FROM preguntas WHERE id_cues = ?', datos);
 }
 
 // Borrar una pregunta (datos = [id_cues, id_pre])
@@ -43,17 +30,17 @@ let eliminarPregunta = function(datos) {
     });
 }
 
-// Modificar pregunta (datos = [pregunta, respuesta, correcta, id_cues, id_pre])
+// Modificar pregunta (datos = [id_cues, id_pre, pre, resp, correcta])
 let modificarPregunta = function(datos) {
 
-    DDBB.db.serialize(() => {
-        DDBB.db.run(`UPDATE preguntas SET pregunta = ?, respuesta = ?, correcta = ? WHERE id_cues = ? AND id_pre = ?`, datos, (err, rows) => {
-        if (err) {
-            throw err;
-        }
-        console.log('Pregunta upgradeada: ', rows);
-        });
-    });
+    DDBB.DB().update('cuestionarios', {
+        pregunta: datos.pre,
+        respuesta: datos.resp,
+        correcta: datos.correcta
+    }, {
+        id_cues: datos.id_cues,
+        id_pre: datos.id_pre
+    })
 }
 
 exports.insertarPregunta = insertarPregunta;

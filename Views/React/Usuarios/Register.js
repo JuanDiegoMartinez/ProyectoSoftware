@@ -15,15 +15,16 @@ class Register extends React.Component {
         e.preventDefault();
         const body = await handleRegister();
         this.setState({ response: body });
+        document.getElementById('form').reset();
     };
 
     render() {
         return(
             <React.Fragment>
                 
-                <h1 align="center"> Kahoot </h1>
+                <h1 align="center"> Registro </h1>
   
-                <form align="center" onSubmit={this.handleSubmit}>
+                <form align="center" id="form" onSubmit={this.handleSubmit}>
                     <p> Usuario: <input id="Usuario" type="text" required /> </p>
                     <p> Contraseña: <input id="Password" type="password" required /> </p>
                     <p> Email: <input id="Email" type="email" required /> </p>
@@ -31,6 +32,8 @@ class Register extends React.Component {
                     <input type="radio" name="Tipousuario" value="alumno" defaultChecked /> Alumno <br/>
                     <p> <button type="submit"> Enviar </button> </p>
                 </form>
+
+                <p>{this.state.response}</p>
 
                 <p align="center"> <Link to="/Login"> ¿Ya tienes una cuenta? </Link> </p>
 

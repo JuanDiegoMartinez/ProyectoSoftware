@@ -1,3 +1,0 @@
-function comprobarLoginBBDD(user, pass) {
-
-}

@@ -1,21 +1,24 @@
 const DDBB = require('./ConexionBBDD');
 
-// Insertar un usuario (datos = [nombre, password, email])
+// Insertar un usuario (datos = [user, pass, email])
 let insertarUsuario = function(datos) {
 
-    DDBB.db.serialize(() => {
-        DDBB.db.run(`INSERT INTO usuarios VALUES(?,?,?)`, datos, (err, rows) => {
-            if (err) {
-                throw err;
-            }
-            console.log('Usuario insertado');
-        });
-    });
+    DDBB.DB().insert('usuarios', {
+        nombre: datos[0],
+        password: datos[1],
+        email: datos[2]
+    })
 }
 
-// Modificar un usuario (datos = [password, email, nombre])
+// Modificar un usuario (datos = [user, pass, email])
 let modificarUsuario = function(datos) {
-    //DDBB.DB().update('usuarios', datos, []
+    
+    DDBB.DB().update('usuarios', {
+        password: datos[1],
+        email: datos[2]
+    }, {
+        nombre: datos[0] 
+    })
 }
 
 // TODO: este todavía no está terminado
@@ -24,16 +27,16 @@ let eliminarUsuario = function(datos) {
 
 }
 
-// Obtener los datos de un usuario (datos = nombre del usuario)
+// Obtener los datos de un usuario (datos = user)
 let datosUsuario = function(datos) {
     return DDBB.DB().queryFirstRow('SELECT * FROM usuarios WHERE LOWER(nombre) = LOWER(?)', datos);
 }
 
-// Para hacer login (datos = [nombre, password])
+// Para hacer login (datos = [user, pass])
 let loginUsuario = function(datos) {
-    let esta = DDBB.DB().queryFirstRow('SELECT * FROM usuarios WHERE LOWER(nombre) = LOWER(?) AND password = ?', datos.user, datos.pass);
 
-    console.log(esta);
+    let esta = DDBB.DB().queryFirstRow('SELECT * FROM usuarios WHERE LOWER(nombre) = LOWER(?) AND password = ?', datos[0], datos[1]);
+
     if ( esta === undefined) {
         return false;
     }

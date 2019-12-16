@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import handleLogin from '../../../Controllers/Clogin';
+import Barra from '../Barra';
 
-class Login extends React.Component {
+class Principal extends React.Component {
 
     constructor(props) {
         super(props);
@@ -25,8 +25,8 @@ class Login extends React.Component {
         return(
             <React.Fragment>
                 
-                <h1 align="center"> Kahoot </h1>
-  
+                <Barra />
+
                 <p>{this.state.response}</p>
                 <form align="center" onSubmit={this.handleSubmit}>
                     <p> Usuario: <input id="Usuario" type="text" value={this.state.postUser}
@@ -46,4 +46,4 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+export default Principal;
