@@ -1,4 +1,4 @@
-//Función para obtener los datos del usuario
+//Función para obtener los cuestionarios del usuario
 async function handleData() {
     
     const response = await fetch('/listar/cuestionarios', {
@@ -12,28 +12,57 @@ async function handleData() {
     return body;
 }
 
-//Función que controla la modificación de datos del usuario
-async function handleModifications() {
+//Función que controla la eliminación de un cuestionario
+async function handleDelete(id) {
 
-    var password1 = document.getElementById('Password1').value;
-    var password2 = document.getElementById('Password2').value;
-    var email = document.getElementById("Email").value;
+    const response = await fetch('/eliminar/cuestionario', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id_cues: id}),
+    });
 
-    if (password1 === password2) {
+    const body = await response.text();
+    return body;
+}
+
+//Función que controla la inserción de un nuevo cuestionario
+async function handleInsert() {
+
+    var nombreC = document.getElementById('Nombre').value;
+    var asignatura = document.getElementById("Asignatura").value;
+
+    const response = await fetch('/insertar/cuestionario', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nombre: nombreC, asig: asignatura }),
+    });
+    
+    const body = await response.text();
+    return body;
+}
+
+//Función que controla la modificación de datos de los cuestionarios
+async function handleModifications(num) {
+
+    for (var i = 0; i < num; i++) {
         
+        var id = document.getElementById("id" + i).innerHTML;
+        var nombreC = document.getElementById('Nom' + i).value;
+        var asignatura = document.getElementById('Asig' + i).value;
+        
+
         const response = await fetch('/modificar/usuario', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ pass: password1, email: email }),
+            body: JSON.stringify({ id_cues: id, nombre: nombreC, asig: asignatura }),
         });
-
-        const body = await response.text();
-        return body;
     }
-    
-    return false;
 }
 
-export default {handleData, handleModifications};
+export default {handleData, handleDelete, handleInsert, handleModifications};

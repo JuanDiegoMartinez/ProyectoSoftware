@@ -26,8 +26,6 @@ let eliminarCuestionario = function(datos) {
 
 // Listar los cuestionarios de un usuario (datos = nombre de usuario)
 let listarCuestionarios = function(datos) {
-    var a = DDBB.DB().queryFirstRow('SELECT COUNT(*) FROM cuestionarios WHERE LOWER(nombre_usu) = LOWER(?)', datos);
-    console.log(a);
     return DDBB.DB().query('SELECT * FROM cuestionarios WHERE LOWER(nombre_usu) = LOWER(?)', datos);
 }
 

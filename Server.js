@@ -116,7 +116,7 @@ app.post('/eliminar/cuestionario', (req, res) => {
 
   console.log('Estoy en /eliminar/cuestionario: ', req.body)
   cuestionarios.eliminarCuestionario(req.body.id_cues);
-  res.send('cuestionario eliminado');
+  res.send('true');
 });
 
 // Listar cuestionarios (req = user)
