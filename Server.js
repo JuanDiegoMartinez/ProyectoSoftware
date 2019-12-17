@@ -140,26 +140,33 @@ const preguntas = require('./BBDD/QuerysPreguntas');
 
 // Insertar pregunta (req = id_cues, id_pre, pre, resp, correcta)
 app.post('/insertar/pregunta', (req, res) => {
-  preguntas.insertarPregunta(req.body);
+
+  console.log('Estoy en /insertar/pregunta: ', req.body)
+  preguntas.insertarPregunta([req.body.id_cues, req.body.id_pre, req.body.pre, req.body.resp, req.body.correcta]);
   res.send('hola');
 });
 
 // Eliminar pregunta (req = id_cues, id_pre)
 app.post('/eliminar/pregunta', (req, res) => {
-  preguntas.eliminarPregunta(req.body);
+
+  console.log('Estoy en /eliminar/pregunta: ', req.body)
+  preguntas.eliminarPregunta([req.body.id_cues, req.body.id_pre]);
   res.send('hola');
 });
 
 // Listar preguntas (req = id_cues)
 app.post('/listar/preguntas', (req, res) => {
-  var cues = preguntas.listarPreguntasCuestionario(req.body);
+
+  console.log('Estoy en /listar/preguntas: ', req.body)
+  var cues = preguntas.listarPreguntasCuestionario(req.body.id_cues);
+  console.log('Estoy en /listar/preguntas: ', cues);
   res.send(cues);
 });
 
 //Modificar pregunta (req = id_cues, id_pre, pre, resp, correcta)
 app.post('/modificar/pregunta', (req, res) => {
-  preguntas.modificarPregunta(req.body);
+  
+  console.log('Estoy en /modificar/pregunta: ', req.body)
+  preguntas.modificarPregunta([req.body.id_cues, req.body.id_pre, req.body.pre, req.body.resp, req.body.correcta]);
   res.send('hola');
 });
-
-exports.app = app;

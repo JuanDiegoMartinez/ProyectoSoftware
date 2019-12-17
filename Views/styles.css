@@ -67,3 +67,7 @@ nav {
 header {
     margin-top: -75px;
 }
+
+.prueba {
+    display: none;
+}

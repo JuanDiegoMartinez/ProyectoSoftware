@@ -63,6 +63,8 @@ class Login extends React.Component {
                 <p align="center"> <Link to="/Alumno/Sala"> Elegir sala </Link> </p>
                 <p align="center"> <Link to="/Principal"> Principal </Link> </p>
                 <p align="center"> <Link to="/Profesor/Cuestionarios"> Crear cuestionario </Link> </p>
+                <p align="center"> <Link to="/Profesor/Preguntas"> Preguntas </Link> </p>
+                <p align="center"> <Link to="/Pantalla"> Pantalla </Link> </p>
 
             </React.Fragment>
         );

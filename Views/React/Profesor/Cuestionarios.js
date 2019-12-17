@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import CCuestionarios from '../../../Controllers/CCuestionarios';
+import Preguntas from './Preguntas';
 
 class Cuestionarios extends React.Component {
 
@@ -8,7 +9,8 @@ class Cuestionarios extends React.Component {
         super(props);
 
         this.state = {
-            listaCues: Array()
+            listaCues: Array(),
+            seleccionado: -1
         }
     }
     
@@ -18,7 +20,7 @@ class Cuestionarios extends React.Component {
         var boton = document.getElementById('Insert');
         boton.style.display = "none";
         var boton = document.getElementById('Mod');
-        boton.style.display = "none";  
+        boton.style.display = "none";
         
         this.montarTabla(datos);
     }
@@ -62,10 +64,15 @@ class Cuestionarios extends React.Component {
         for (var i = 0; i < this.state.listaCues.length; i++) {
             table += `<tr>
                     <td>${this.state.listaCues[i].id_cues}</td> <td>${this.state.listaCues[i].nombre_cues}</td> <td>${this.state.listaCues[i].asignatura}</td>
-                    <td><input type="radio" name="Elegido" value=${i} /> </td>
+                    <td><input type="radio" id="Elegido${i}" name="unico" value=${i} /> </td>
                 </tr> `;
         }
+        console.log(table);
         document.getElementById("tabla").innerHTML = table;
+
+        document.getElementById("Elegido0").addEventListener("change", this.handleSubmit);
+        document.getElementById("Elegido1").addEventListener("change", this.handleSubmit);
+        document.getElementById("Elegido2").addEventListener("change", this.handleSubmit);
     }
 
     async saberCuestionario() {
@@ -80,12 +87,18 @@ class Cuestionarios extends React.Component {
                 break;
             }
         }
+        console.log(pos);
         return pos;
     }
 
     handleSubmit = e => {
         e.preventDefault();
         
+        var id = this.state.listaCues[e.target.value].id_cues;
+
+        this.setState({
+            seleccionado: id
+        });     
     }
 
     handleMod = async e => {
@@ -103,7 +116,7 @@ class Cuestionarios extends React.Component {
                     <td id="id${i}">${this.state.listaCues[i].id_cues}</td> 
                     <td><input id="Nom${i}" type="text" value=${this.state.listaCues[i].nombre_cues} /></td> 
                     <td><input id="Asig${i}" type="text" value=${this.state.listaCues[i].asignatura} /></td>
-                    <td><input type="radio" name="Elegido" value=${i} /> </td>
+                    <td><input type="radio" id="Elegido${i}" name="unico" value=${i} /> </td>
                 </tr> `;
         }
 
@@ -137,13 +150,13 @@ class Cuestionarios extends React.Component {
     render() {
         return(
             <React.Fragment>
-                
+
                 <div align="center">
                     <h1> Lista de cuestionarios</h1>
                     <form id="form">
                     <table id="tabla">
                     </table>
-                    <button type="submit" onClick={this.handleSubmit}> Añadir Preguntas </button>
+                    <button type="submit" onClick={this.renderRedirect}> Añadir Preguntas </button>
                     <button type="submit" onClick={this.handleMod}> Modificar Cuestionarios </button>
                     <button type="submit" onClick={this.handleDelete}> Eliminar Cuestionario </button>
                     <button type="submit" onClick={this.nuevaFila}> Añadir Cuestionario </button>
@@ -151,6 +164,9 @@ class Cuestionarios extends React.Component {
                     <p><button type="submit" id="Mod" onClick={this.modificar}> Aceptar Cambios </button></p>
                     </form>
                     <p> <Link to="/Profesor/CrearCuestionario"> Crear cuestionario </Link> </p>
+                    <p> <Link to="/Profesor/AbrirCuestionario">  Abrir cuestionario </Link> </p>
+                    <p> <Link to={`/Profesor/Preguntas/${this.state.seleccionado}`}>  Prueba </Link> </p>
+                    
                 </div>
             </React.Fragment>
         )

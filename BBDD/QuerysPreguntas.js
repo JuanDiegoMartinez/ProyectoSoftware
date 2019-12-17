@@ -4,16 +4,17 @@ const DDBB = require('./ConexionBBDD');
 let insertarPregunta = function(datos) {
 
     DDBB.DB().insert('preguntas', {
-        id_cues: datos.id_cues,
-        id_pre: datos.id_pre,
-        pregunta: datos.pre,
-        respuesta: datos.resp,
-        correcta: datos.correcta
+        id_cues: datos[0],
+        id_pre: datos[1],
+        pregunta: datos[2],
+        respuesta: datos[3],
+        correcta: datos[4]
     })
 }
   
 // Obtener las preguntas de un cuestionario (datos = id_cues)
 let listarPreguntasCuestionario = function(datos) {
+    console.log(datos);
     return DDBB.DB().query('SELECT * FROM preguntas WHERE id_cues = ?', datos);
 }
 
@@ -34,16 +35,23 @@ let eliminarPregunta = function(datos) {
 let modificarPregunta = function(datos) {
 
     DDBB.DB().update('cuestionarios', {
-        pregunta: datos.pre,
-        respuesta: datos.resp,
-        correcta: datos.correcta
+        pregunta: datos[2],
+        respuesta: datos[3],
+        correcta: datos[4]
     }, {
-        id_cues: datos.id_cues,
-        id_pre: datos.id_pre
+        id_cues: datos[0],
+        id_pre: datos[1]
     })
+}
+
+// Obtener el id de la última pregunta insertada (datos = id_cues)
+let obtenerUltimaPreguntaInsertada = function(datos) {
+    var a = DDBB.DB().query('SELECT * FROM preguntas WHERE id_cues = ?', datos);
+    console.log("soy a: ", a);
 }
 
 exports.insertarPregunta = insertarPregunta;
 exports.modificarPregunta = modificarPregunta;
 exports.eliminarPregunta = eliminarPregunta;
 exports.listarPreguntasCuestionario = listarPreguntasCuestionario;
+exports.obtenerUltimaPreguntaInsertada = obtenerUltimaPreguntaInsertada;
