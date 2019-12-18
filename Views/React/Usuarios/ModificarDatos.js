@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import CModificarDatos from '../../../Controllers/CModificarDatos';
+import CModificarDatos from '../../../Controllers/ControllerModificarDatos';
 
 class ModificarDatos extends React.Component {
 

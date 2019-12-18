@@ -1,10 +1,8 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import handleLogin from '../../../Controllers/CPantalla';
+import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 
-
-class Pantalla extends React.Component {
+class MostrarPregunta extends React.Component {
 
     constructor(props) {
         super(props);
@@ -20,9 +18,6 @@ class Pantalla extends React.Component {
         this.setState({
             user: socket,
         });
-
-        let location = useLocation();
-        console.log(location);
     }
   
     handleSubmit = async e => {
@@ -36,14 +31,12 @@ class Pantalla extends React.Component {
     render() {
         return(
             <React.Fragment>
-                
-                <p>hola</p>
-                <button type="submit" onClick={this.handleSubmit}> prueba </button>
 
+                
+                
             </React.Fragment>
         );
     }
 }
 
-
-export default Pantalla;
+export default MostrarPregunta;

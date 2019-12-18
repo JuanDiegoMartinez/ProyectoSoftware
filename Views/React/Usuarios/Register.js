@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import handleRegister from '../../../Controllers/CRegister';
+import handleRegister from '../../../Controllers/ControllerRegister';
 
 class Register extends React.Component {
 

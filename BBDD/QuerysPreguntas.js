@@ -1,14 +1,17 @@
 const DDBB = require('./ConexionBBDD');
 
-// Insertar una pregunta (datos = [id_cues, id_pre, pre, resp, correcta])
+// Insertar una pregunta (datos = [id_cues, id_pre, pre, resp1, resp2, resp3, resp4, correcta])
 let insertarPregunta = function(datos) {
 
     DDBB.DB().insert('preguntas', {
         id_cues: datos[0],
         id_pre: datos[1],
         pregunta: datos[2],
-        respuesta: datos[3],
-        correcta: datos[4]
+        respuesta1: datos[3],
+        respuesta2: datos[4],
+        respuesta3: datos[5],
+        respuesta4: datos[6],
+        correcta: datos[7]
     })
 }
   
@@ -31,13 +34,16 @@ let eliminarPregunta = function(datos) {
     });
 }
 
-// Modificar pregunta (datos = [id_cues, id_pre, pre, resp, correcta])
+// Modificar pregunta (datos = [id_cues, id_pre, pre, resp1, resp2, resp3, resp4, correcta])
 let modificarPregunta = function(datos) {
 
-    DDBB.DB().update('cuestionarios', {
+    DDBB.DB().update('preguntas', {
         pregunta: datos[2],
-        respuesta: datos[3],
-        correcta: datos[4]
+        respuesta1: datos[3],
+        respuesta2: datos[4],
+        respuesta3: datos[5],
+        respuesta4: datos[6],
+        correcta: datos[7]
     }, {
         id_cues: datos[0],
         id_pre: datos[1]
@@ -46,8 +52,8 @@ let modificarPregunta = function(datos) {
 
 // Obtener el id de la última pregunta insertada (datos = id_cues)
 let obtenerUltimaPreguntaInsertada = function(datos) {
-    var a = DDBB.DB().query('SELECT * FROM preguntas WHERE id_cues = ?', datos);
-    console.log("soy a: ", a);
+    return DDBB.DB().queryFirstRow('SELECT MAX(id_pre) as "max" FROM preguntas WHERE id_cues = ?', datos);
+    
 }
 
 exports.insertarPregunta = insertarPregunta;

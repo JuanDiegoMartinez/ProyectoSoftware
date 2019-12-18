@@ -8,7 +8,7 @@ class ElegirSala extends React.Component {
         console.log("socket disponible");
     }
 
-    handleClick() {
+    handleClick = e => {
         console.log("hola");
         this.soc.connect('/');
         this.soc.send('hola', 'he pulsado el botón');
@@ -19,7 +19,7 @@ class ElegirSala extends React.Component {
             <React.Fragment>
                 <p align="center"> Código de sala: <br/> 
                 <input name="Sala" type="text"/> </p>
-                <button type="button" onClick={ () => this.handleClick()}> Enviar </button>
+                <Link to="/Sala"> Entrar </Link>
                 
             </React.Fragment>
         )

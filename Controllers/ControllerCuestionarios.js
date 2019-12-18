@@ -46,23 +46,21 @@ async function handleInsert() {
 }
 
 //Función que controla la modificación de datos de los cuestionarios
-async function handleModifications(num) {
-
-    for (var i = 0; i < num; i++) {
-        
-        var id = document.getElementById("id" + i).innerHTML;
-        var nombreC = document.getElementById('Nom' + i).value;
-        var asignatura = document.getElementById('Asig' + i).value;
-        
-
-        const response = await fetch('/modificar/cuestionario', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id_cues: id, nombre: nombreC, asig: asignatura }),
-        });
-    }
+async function handleModifications(id) {
+    
+    var nombreC = document.getElementById('Nombre').value;
+    var asignatura = document.getElementById('Asignatura').value;
+    
+    const response = await fetch('/modificar/cuestionario', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id_cues: id, nombre: nombreC, asig: asignatura }),
+    });
+      
+    const body = await response.text();
+    return body;
 }
 
 export default {handleData, handleDelete, handleInsert, handleModifications};

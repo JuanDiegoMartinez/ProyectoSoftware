@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import handleLogin from '../../../Controllers/Clogin';
+import handleLogin from '../../../Controllers/ControllerLogin';
 import Barra from '../Barra';
 
 class Login extends React.Component {
@@ -27,11 +27,6 @@ class Login extends React.Component {
         document.getElementById('form').reset();
         
     };
-
-    go(routeName) {
-        this.props.navigation.navigate(routeName);
-    }
-
     
     hola() {
         
@@ -58,13 +53,10 @@ class Login extends React.Component {
                 </form>
                 <p>{this.state.responseToPost}</p>
                 
-
                 <p align="center"> <Link to="/Register"> ¿Aún no tienes una cuenta? </Link> </p>
-                <p align="center"> <Link to="/Alumno/Sala"> Elegir sala </Link> </p>
+                <p align="center"> <Link to="/Sala"> Elegir sala </Link> </p>
                 <p align="center"> <Link to="/Principal"> Principal </Link> </p>
-                <p align="center"> <Link to="/Profesor/Cuestionarios"> Crear cuestionario </Link> </p>
-                <p align="center"> <Link to="/Profesor/Preguntas"> Preguntas </Link> </p>
-                <p align="center"> <Link to="/Pantalla"> Pantalla </Link> </p>
+                <p align="center"> <Link to="/Cuestionarios"> Crear cuestionario </Link> </p>
 
             </React.Fragment>
         );

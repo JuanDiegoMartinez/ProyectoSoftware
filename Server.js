@@ -29,13 +29,31 @@ app.use(session({
   saveUninitialized: "false"
 }));
 
+var listaUsuarios = Array();
+var puntuacion = Array();
+var listaPreguntas = Array();
+
 // Conexiones de los sockets
 io.on('connection', socket => {
     console.log('socket connected: ', socket.id);
 
     socket.on('hola', (data) => {
       console.log(data);
+      socket.id = Proyector;
+      console.log(socket.id);
     });
+
+    if (socket.id === "Proyector") {
+
+      socket.on('ObtenerPreguntas', (datos) => {
+        listaPreguntas = preguntas.listarPreguntasCuestionario(datos);
+        socket.broadcast.to("Proyector").emit('Preguntas', listaPreguntas);
+      });
+
+      for (var i = 0; i < listaPreguntas.length; i++) {
+        setTimeout(console.log.bind(null, 'Two second later'), 2000);
+      }
+    }
 });
 
 // Server localhost:4000
@@ -52,7 +70,7 @@ const usuarios = require('./BBDD/QuerysUsuarios');
 
 // Login usuario (req = user, pass)
 app.post('/login/usuario', function(req, res) {
-  
+
   console.log('Estoy en /login/usuario: ', req.body);
   var login = usuarios.loginUsuario([req.body.user, req.body.pass]);
 
@@ -142,7 +160,7 @@ const preguntas = require('./BBDD/QuerysPreguntas');
 app.post('/insertar/pregunta', (req, res) => {
 
   console.log('Estoy en /insertar/pregunta: ', req.body)
-  preguntas.insertarPregunta([req.body.id_cues, req.body.id_pre, req.body.pre, req.body.resp, req.body.correcta]);
+  preguntas.insertarPregunta([req.body.id_cues, req.body.id_pre, req.body.pre, req.body.resp1, req.body.resp2, req.body.resp3, req.body.resp4, req.body.correcta]);
   res.send('hola');
 });
 
@@ -151,7 +169,7 @@ app.post('/eliminar/pregunta', (req, res) => {
 
   console.log('Estoy en /eliminar/pregunta: ', req.body)
   preguntas.eliminarPregunta([req.body.id_cues, req.body.id_pre]);
-  res.send('hola');
+  res.send('true');
 });
 
 // Listar preguntas (req = id_cues)
@@ -167,6 +185,14 @@ app.post('/listar/preguntas', (req, res) => {
 app.post('/modificar/pregunta', (req, res) => {
   
   console.log('Estoy en /modificar/pregunta: ', req.body)
-  preguntas.modificarPregunta([req.body.id_cues, req.body.id_pre, req.body.pre, req.body.resp, req.body.correcta]);
+  preguntas.modificarPregunta([req.body.id_cues, req.body.id_pre, req.body.pre, req.body.resp1, req.body.resp2, req.body.resp3, req.body.resp4, req.body.correcta]);
   res.send('hola');
+});
+
+//Última pregunta (req = id_cues)
+app.post('/ultima/pregunta', (req, res) => {
+  
+  console.log('Estoy en /ultima/pregunta: ', req.body)
+  var max = preguntas.obtenerUltimaPreguntaInsertada(req.body.id_cues);
+  res.send(max);
 });

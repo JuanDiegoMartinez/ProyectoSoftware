@@ -1,14 +1,22 @@
 import React from 'react';
-import Login from './Usuarios/Login';
-import Register from './Usuarios/Register';
-import ElegirSala from './Alumno/ElegirSala';
-import Cuestionarios from './Profesor/Cuestionarios';
-import Preguntas from './Profesor/Preguntas';
-import Principal from './Usuarios/Principal';
-import ModificarDatos from './Usuarios/ModificarDatos';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import Pantalla from './Proyector/Pantalla';
-import AbrirCuestionario from './Profesor/AbrirCuestionario';
+
+//Usuarios
+import Register from './Usuarios/Register';
+import Login from './Usuarios/Login';
+import Principal from './Usuarios/Principal';
+import ElegirSala from './Usuarios/ElegirSala';
+import ModificarDatos from './Usuarios/ModificarDatos';
+
+//Cuestionarios
+import Cuestionarios from './Cuestionarios/Cuestionarios';
+import Preguntas from './Cuestionarios/Preguntas';
+import AbrirCuestionario from './Cuestionarios/AbrirCuestionario';
+
+//Pantallas
+import Proyector from './Pantallas/Proyector';
+import MostrarPregunta from './Pantallas/MostrarPregunta';
+
 
 class App extends React.Component {
   
@@ -18,15 +26,19 @@ class App extends React.Component {
         <div>
           <Redirect from="/" to="/Login" />
           <Switch>
+
             <Route exact path="/Login" component={Login} />
             <Route exact path="/Register" component={Register} />
-            <Route exact path="/Alumno/Sala" component={ElegirSala} />
-            <Route exact path="/Profesor/Cuestionarios" component={Cuestionarios} />
-            <Route exact path="/Profesor/Preguntas/:id" component={Preguntas} />
+            <Route exact path="/Sala" component={ElegirSala} />
             <Route exact path="/Principal" component={Principal} />
             <Route exact path="/ModificarDatos" component={ModificarDatos} />
-            <Route exact path="/Pantalla" component={Pantalla} />
-            <Route exact path="/Profesor/AbrirCuestionario" component={AbrirCuestionario} />
+
+            <Route exact path="/Cuestionarios" component={Cuestionarios} />
+            <Route exact path="/Preguntas/:id" component={Preguntas} />
+            <Route exact path="/AbrirCuestionario/:id" component={AbrirCuestionario} />
+            
+            <Route exact path="/Proyector/:id" component={Proyector} />
+            <Route exact path="/MostrarPregunta" component={MostrarPregunta} />
           </Switch>
         </div>
       </BrowserRouter>
