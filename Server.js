@@ -30,6 +30,7 @@ app.use(session({
 }));
 
 var listaUsuarios = Array();
+var listaSockets = Array();
 var puntuacion = Array();
 var listaPreguntas = Array();
 
@@ -37,10 +38,16 @@ var listaPreguntas = Array();
 io.on('connection', socket => {
     console.log('socket connected: ', socket.id);
 
-    socket.on('hola', (data) => {
-      console.log(data);
-      socket.id = Proyector;
-      console.log(socket.id);
+    socket.on('submitQuestion', function(pregunta) {
+
+      console.log('Estoy en submitQuestion: ', pregunta);
+      socket.broadcast.emit('deliverQuestion', pregunta);
+    });
+
+    socket.on('nuevoUsuario', function(usuario) {
+      listaUsuarios.push(usuario);
+      listaSockets.push(socket.id);
+      console.log(usuario);
     });
 
     if (socket.id === "Proyector") {

@@ -19,15 +19,6 @@ class Proyector extends React.Component {
         var socket = io.connect('/');
         socket.id = "Proyector";
 
-        this.setState({
-            user: socket,
-            idCues: this.props.match.params.id
-        });
-
-        console.log("id: ", socket.id);
-        console.log("otro id: ", this.state.user.id);
-        console.log("cues: ", this.state.idCues);
-
         socket.emit('hola', 'mierda');
         socket.emit('obtenerPreguntas', this.state.idCues);
         
