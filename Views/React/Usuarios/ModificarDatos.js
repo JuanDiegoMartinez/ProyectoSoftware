@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import CModificarDatos from '../../../Controllers/CModificarDatos';
+import CModificarDatos from '../../../Controllers/ControllerModificarDatos';
 
 class ModificarDatos extends React.Component {
 
@@ -40,7 +40,7 @@ class ModificarDatos extends React.Component {
                 <form align="center" onSubmit={this.handleSubmit}>
                     <p> Nueva Contraseña: <input id="Password1" type="password" /> </p>
                     <p> Repite Contraseña: <input id="Password2" type="password" /> </p>
-                    <p> Email: <input id="Email" type="email" defaultValue={this.state.email}/> </p>    
+                    <p> Email: <input id="Email" type="email" defaultValue={this.state.email}/> </p>   
                     <p> <button type="submit"> Guardar cambios </button> </p>
                 </form>
 
