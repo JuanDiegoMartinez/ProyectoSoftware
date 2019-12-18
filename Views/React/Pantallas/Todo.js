@@ -6,11 +6,9 @@ function controlTotal() {
 }
 
 function esperaEnvioPregunta() {
-    return <div id="Espera">
+    return <div id="Espera" align="center">
                 <h1> Espera a la siguiente pregunta </h1>
-    <a href="https://icon-library.net/icon/waiting-icon-gif-26.html" title="Waiting Icon Gif #309258">
-        <img src="https://icon-library.net//images/waiting-icon-gif/waiting-icon-gif-26.jpg" width="350" />
-    </a>
+        <img src="https://flevix.com/wp-content/uploads/2019/07/Ajax-Preloader.gif" width="350" />
     </div>;
 }
 

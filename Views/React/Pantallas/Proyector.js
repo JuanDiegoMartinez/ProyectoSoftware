@@ -36,7 +36,8 @@ class Proyector extends React.Component {
             <React.Fragment>
                 
                 <div>
-                    <p> Hola </p>
+                    <h1> Información de la sesión </h1>
+                    <p> Esperando alumnos... </p>
                 </div>   
 
             </React.Fragment>

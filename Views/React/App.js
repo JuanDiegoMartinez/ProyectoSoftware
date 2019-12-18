@@ -40,7 +40,7 @@ class App extends React.Component {
             <Route exact path="/Proyector/:id" component={Proyector} />
             <Route exact path="/MostrarPregunta" component={MostrarPregunta} />
           </Switch>
-        </div>
+          </div>
       </BrowserRouter>
     );
   }

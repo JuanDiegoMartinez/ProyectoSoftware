@@ -49,9 +49,9 @@ class Preguntas extends React.Component {
 
         for (var i = 0; i < this.state.listaPre.length; i++) {
             table += `<tbody id="Fila${i}">
-            <tr> <th> Id pregunta: ${this.state.listaPre[i].id_pre} Pregunta: ${this.state.listaPre[i].pregunta} </th> </tr>
-                        <tr> <td> <p> Respuesta 1: ${this.state.listaPre[i].respuesta1} Respuesta 2: ${this.state.listaPre[i].respuesta2} </p>
-                        <p> Respuesta 3: ${this.state.listaPre[i].respuesta3} Respuesta 4: ${this.state.listaPre[i].respuesta4} </p> </td> </tr>
+            <tr> <th> Pregunta: ${this.state.listaPre[i].pregunta} </th> </tr>
+                        <tr> <td> <p> Respuesta 1: ${this.state.listaPre[i].respuesta1} </p><p> Respuesta 2: ${this.state.listaPre[i].respuesta2} </p>
+                        <p> Respuesta 3: ${this.state.listaPre[i].respuesta3} </p><p> Respuesta 4: ${this.state.listaPre[i].respuesta4} </p> </td> </tr>
                         <tr> <td align="center"> Correcta: ${this.state.listaPre[i].correcta} </td> </tr>
                         <tr> <td align="center"> <input type="radio" id="Elegido${i}" name="unico" value=${i} /> </td> </tr>
                         </tbody>`;
@@ -87,11 +87,11 @@ class Preguntas extends React.Component {
         e.preventDefault();
 
         var nuevafila = ` 
-        <tr> <td> Pregunta: <input id="Pregunta" type="text" /> </td> </tr>
-        <tr> <td> <p> Respuesta1: <input id="Respuesta1" type="text" /> </p>
-        <p> Respuesta2: <input id="Respuesta2" type="text" /> </p>
-        <p> Respuesta3: <input id="Respuesta3" type="text" /> </p> 
-        <p> Respuesta4: <input id="Respuesta4" type="text" /> </p> </td>  </tr>
+        <tr> <td> Pregunta: <input class= "textolargo" id="Pregunta" type="text" /> </td> </tr>
+        <tr> <td> <p> Respuesta1: <input class= "textolargo" id="Respuesta1" type="text" /> </p>
+        <p> Respuesta2: <input class= "textolargo" id="Respuesta2" type="text" /> </p>
+        <p> Respuesta3: <input class= "textolargo" id="Respuesta3" type="text" /> </p> 
+        <p> Respuesta4: <input class= "textolargo" id="Respuesta4" type="text" /> </p> </td>  </tr>
         <tr> <td> Correcta: <input type="number" id="Correcta" min="1" max="4" /> </td> </tr>`;
 
         var boton = document.getElementById('Insert');
@@ -122,11 +122,11 @@ class Preguntas extends React.Component {
 
         var pos = this.state.radioPul;
 
-        var fila = `<tr> <th> Id pregunta: ${this.state.listaPre[pos].id_pre} Pregunta: <input id="Pregunta" type="text" value=${this.state.listaPre[pos].pregunta} /> </th> </tr>
-                        <tr> <td> <p> Respuesta 1: <input id="Respuesta1" value=${this.state.listaPre[pos].respuesta1} />
-                        Respuesta 2: <input id="Respuesta2" value=${this.state.listaPre[pos].respuesta2} /> </p>
-                        <p> Respuesta 3: <input id="Respuesta3" value=${this.state.listaPre[pos].respuesta3} /> 
-                        Respuesta 4: <input id="Respuesta4" value=${this.state.listaPre[pos].respuesta4} /> </p> </td> </tr>
+        var fila = `<tr> <th> Pregunta: <input className= "textolargo" id="Pregunta" type="text" value=${this.state.listaPre[pos].pregunta} /> </th> </tr>
+                        <tr> <td> <p> Respuesta 1: <input className= "textolargo" id="Respuesta1" value=${this.state.listaPre[pos].respuesta1} />
+                        Respuesta 2: <input id="Respuesta2" className= "textolargo" value=${this.state.listaPre[pos].respuesta2} /> </p>
+                        <p> Respuesta 3: <input id="Respuesta3" className= "textolargo" value=${this.state.listaPre[pos].respuesta3} /> 
+                        Respuesta 4: <input id="Respuesta4" className= "textolargo" value=${this.state.listaPre[pos].respuesta4} /> </p> </td> </tr>
                         <tr> <td align="center"> Correcta: <input id="Correcta" type="number" min="1" max="4" value=${this.state.listaPre[pos].correcta} /> </td> </tr>
                         <tr> <td align="center"> <input type="radio" id="Elegido${pos}" name="unico" value=${pos} /> </td> </tr>`
 

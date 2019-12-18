@@ -50,7 +50,7 @@ class AbrirCuestionario extends React.Component {
 
         for (var i = 0; i < this.state.listaPre.length; i++) {
             table += `<tbody id="Fila${i}">
-            <tr> <th> Id pregunta: ${this.state.listaPre[i].id_pre} Pregunta: ${this.state.listaPre[i].pregunta} </th> 
+            <tr> <th> Pregunta: ${this.state.listaPre[i].pregunta} </th> 
                         <td align="center"> <input type="radio" id="Elegido${i}" name="unico" value=${i} /> </td> </tr>
                         </tbody>`;
         }
@@ -100,13 +100,10 @@ class AbrirCuestionario extends React.Component {
     render() {
         return(
             <React.Fragment>
+                <h1 align="center"> Realizar Cuestionario</h1>
 
-                <h1> Realizar Cuestionario</h1>
-                
-                <p> Id del cuestionario: {this.state.idCues} </p>
-
-                <form id="form">
-                    <p> Tiempo en segundos de las pregunta: </p>
+                <form align="center" id="form">
+                    <p> Tiempo en segundos de las preguntas: </p>
                     <p> <input id="timer" type="number" min="5" max="20"></input> </p>
                     <table align="center" id="tabla">
                     </table>
@@ -114,7 +111,7 @@ class AbrirCuestionario extends React.Component {
                     <button type="submit" onClick={this.enviarPregunta}> Enviar Pregunta </button>
                 </form>
                 <br></br>
-                <Link to={`/Proyector/${this.state.idCues}`}> Mostrar PIN </Link>
+                <p align="center"> <Link to={`/Proyector/${this.state.idCues}`}> Mostrar PIN </Link> </p>
                 
                 <NewWindow>    
                 <Proyector />

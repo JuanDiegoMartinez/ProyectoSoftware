@@ -38,16 +38,18 @@ class Cuestionarios extends React.Component {
         });
 
         //Obtenemos la tabla y añadimos los cuestionarios
+        //QUITADO: <th>Id cuestionario</th>
         var table = `<tr>
-        <th>Id cuestionario</th>
         <th>Nombre del cuestionario</th>
         <th>Asignatura</th>
         <th>Seleccionado</th>
         </tr>`;
 
+        //QUITADO: <td>${this.state.listaCues[i].id_cues}</td>
         for (var i = 0; i < this.state.listaCues.length; i++) {
             table += `<tr id="Fila${i}">
-                    <td>${this.state.listaCues[i].id_cues}</td> <td>${this.state.listaCues[i].nombre_cues}</td> <td>${this.state.listaCues[i].asignatura}</td>
+                    <td>${this.state.listaCues[i].nombre_cues}</td> 
+                    <td>${this.state.listaCues[i].asignatura}</td>
                     <td><input type="radio" id="Elegido${i}" name="unico" value=${i} /> </td>
                     </tr> `;
         }
@@ -83,9 +85,9 @@ class Cuestionarios extends React.Component {
         e.preventDefault();
 
         var nuevafila = `<tr>
-        <td> default </td> 
         <td><input id="Nombre" type="text" /></td> 
         <td><input id="Asignatura" type="text" /></td>
+        <td><input id="Asignatura" type="radio" disabled /></td>
         </tr>`;
 
         var boton = document.getElementById('Insert');
@@ -110,10 +112,10 @@ class Cuestionarios extends React.Component {
 
         var pos = this.state.radioPul;
 
-        var fila = `<td>${this.state.listaCues[pos].id_cues}</td> 
+        var fila = `
         <td><input id="Nombre" type="text" value=${this.state.listaCues[pos].nombre_cues} /></td> 
         <td><input id="Asignatura" type="text" value=${this.state.listaCues[pos].asignatura} /></td>
-        <td><input type="radio" id="Elegido${pos}" name="unico" value=${pos} /> </td>`;
+        <td><input type="radio" id="Elegido${pos}" name="unico" value=${pos} disabled /> </td>`;
 
         document.getElementById("Fila" + pos).innerHTML = fila;
         

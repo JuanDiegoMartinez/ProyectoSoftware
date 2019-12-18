@@ -8,9 +8,11 @@ class ElegirSala extends React.Component {
     render() {
         return(
             <React.Fragment>
-                <p align="center"> Código de sala: <br/> 
+                <h1 align="center"> Elige la sala </h1> <br/> <br/> 
+
+                <p align="center"> Código: <br/> 
                 <input name="Sala" type="text"/> </p>
-                <Link to="/MostrarPregunta"> Entrar </Link>
+                <p align="center"><Link to="/MostrarPregunta"> Entrar </Link></p>
                 
             </React.Fragment>
         )
