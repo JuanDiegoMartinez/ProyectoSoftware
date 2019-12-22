@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Switch, Route, Redirect, Link } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect, Link } from 'react-router-dom';
 
 //Usuarios
 import Register from './Usuarios/Register';
@@ -23,7 +23,7 @@ class App extends React.Component {
   render() {
     return (
       <React.Fragment>
-      <HashRouter>
+      <BrowserRouter>
         <div>
           
           <Switch>
@@ -44,7 +44,7 @@ class App extends React.Component {
 
           <Link to="/Login"> Login </Link>
         </div>
-      </HashRouter>
+      </BrowserRouter>
 
       
 

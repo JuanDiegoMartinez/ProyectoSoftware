@@ -5,7 +5,8 @@ module.exports = {
     entry: ["@babel/polyfill", __dirname + '/Views/React/Index.js'],
     output: {
         path: '/',
-        filename: 'bundle.js'
+        filename: 'bundle.js',
+        publicPath: '/'
     },
     module: {
         rules : [
@@ -32,7 +33,10 @@ module.exports = {
                               '@babel/react',{
                               'plugins': ['@babel/plugin-proposal-class-properties']}]
                 }
-            }
+            },
         ]
+    },
+    devServer: {
+        historyApiFallback: true,
     }
 };
