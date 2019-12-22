@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { HashRouter, Switch, Route, Redirect, Link } from 'react-router-dom';
 
 //Usuarios
 import Register from './Usuarios/Register';
@@ -22,9 +22,10 @@ class App extends React.Component {
   
   render() {
     return (
-      <BrowserRouter>
+      <React.Fragment>
+      <HashRouter>
         <div>
-          <Redirect from="/" to="/Login" />
+          
           <Switch>
 
             <Route exact path="/Login" component={Login} />
@@ -40,8 +41,14 @@ class App extends React.Component {
             <Route exact path="/Proyector/:id" component={Proyector} />
             <Route exact path="/MostrarPregunta" component={MostrarPregunta} />
           </Switch>
+
+          <Link to="/Login"> Login </Link>
         </div>
-      </BrowserRouter>
+      </HashRouter>
+
+      
+
+      </React.Fragment>
     );
   }
 
