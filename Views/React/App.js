@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 //Usuarios
 import Register from './Usuarios/Register';
@@ -17,16 +17,14 @@ import AbrirCuestionario from './Cuestionarios/AbrirCuestionario';
 import Proyector from './Pantallas/Proyector';
 import MostrarPregunta from './Pantallas/MostrarPregunta';
 
-
 class App extends React.Component {
   
   render() {
     return (
       <BrowserRouter>
         <div>
-          <Redirect from="/" to="/Login" />
           <Switch>
-
+            <Route exact path="/" component={Login} />
             <Route exact path="/Login" component={Login} />
             <Route exact path="/Register" component={Register} />
             <Route exact path="/Sala" component={ElegirSala} />

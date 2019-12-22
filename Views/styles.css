@@ -44,3 +44,9 @@ h1 {
 .textolargo {
     width: 80%;
 }
+
+.botonesresp {
+    width: 40%;
+    height: 40%;
+    float: center;
+}

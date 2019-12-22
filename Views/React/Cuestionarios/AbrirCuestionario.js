@@ -19,11 +19,7 @@ class AbrirCuestionario extends React.Component {
         };
     }
 
-    async componentWillMount() {
-
-        //Obtenemos las preguntas del cuestionario
-        var preguntas = await CPreguntas.handleData(this.props.match.params.id);
-
+    componentWillMount() {
         var socket = io.connect('/');
 
         this.setState({
@@ -32,22 +28,25 @@ class AbrirCuestionario extends React.Component {
         });
 
         console.log('Socket del cuestionario: ', this.state.socketP.id);
-        
-        //Montar la tabla de las preguntas
-        this.montarTabla(preguntas);
     }
 
-    //Montar la tabla de las preguntas
-    montarTabla(preguntas) {
-
+    async componentDidMount() {
+        // Obtener las preguntas del cuestionario y guardarlas
+        var preguntas = await CPreguntas.handleData(this.props.match.params.id);
         this.setState({
             listaPre: preguntas
-        });
+        })
+        
+        // Montar la tabla con las preguntas guardadas
+        this.montarTabla()
 
-        var table = `<tr>
-        <th> Id cuestionario: ${this.state.idCues} </th>
-        </tr>`;
+        // Crear los listeners de los radiobuttons
+        this.crearListeners();
+    }
 
+    // Montar la tabla de las preguntas
+    montarTabla() {
+        var table = `<tr> <th> Id cuestionario: ${this.state.idCues} </th> </tr>`;
         for (var i = 0; i < this.state.listaPre.length; i++) {
             table += `<tbody id="Fila${i}">
             <tr> <th> Pregunta: ${this.state.listaPre[i].pregunta} </th> 
@@ -55,14 +54,10 @@ class AbrirCuestionario extends React.Component {
                         </tbody>`;
         }
         document.getElementById("tabla").innerHTML = table;
-
-        //Crear los listeners de los radiobuttons
-        this.crearListeners();
     }
 
     //Crear listeners de los radiobuttons
     crearListeners() {
-
         for (var i = 0; i < this.state.listaPre.length; i++) {
             document.getElementById("Elegido" + i).addEventListener("change", this.saberPregunta);
         }
@@ -100,7 +95,7 @@ class AbrirCuestionario extends React.Component {
     render() {
         return(
             <React.Fragment>
-                <h1 align="center"> Realizar Cuestionario</h1>
+                <h1 id="titulo" align="center"> Realizar Cuestionario</h1>
 
                 <form align="center" id="form">
                     <p> Tiempo en segundos de las preguntas: </p>
@@ -111,12 +106,10 @@ class AbrirCuestionario extends React.Component {
                     <button type="submit" onClick={this.enviarPregunta}> Enviar Pregunta </button>
                 </form>
                 <br></br>
-                <p align="center"> <Link to={`/Proyector/${this.state.idCues}`}> Mostrar PIN </Link> </p>
+                <p align="center"> <Link to={`/Proyector/${this.state.idCues}`} target="_blank"> Abrir proyector </Link> </p>
                 
-                <NewWindow>    
-                <Proyector />
-                </NewWindow>
-                
+                <NewWindow title="Proyector" copyStyles="true" url={`/Proyector/${this.state.idCues}`} />
+
             </React.Fragment>
         );
     }

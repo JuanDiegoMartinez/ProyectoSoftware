@@ -17,6 +17,9 @@ class MostrarPregunta extends React.Component {
     }
 
     async componentDidMount() {
+        // Ocultar espera
+        var espera = document.getElementById('pregunta');
+        espera.style.display = "none";
 
         var usuario = await Usuario.handleData();
 
@@ -29,35 +32,28 @@ class MostrarPregunta extends React.Component {
         });
 
         this.state.user.on('deliverQuestion', function(pregunta) {
-            
-            var table = `<table>
-                            <tr> <th>${pregunta.preg} </th> </tr>
-                            <tr> <td> <button id="boton${1}" value="1">${pregunta.res1}</button> <button id="boton${2}" value="2">${pregunta.res2}</button>  </td> </tr>
-                            <tr> <td> <button id="boton${3}" value="3">${pregunta.res3}</button> <button id="boton${4}" value="4">${pregunta.res4}</button> </td> </tr>
-                        </table>`;
-
+            // Ocultar espera
             var espera = document.getElementById('espera');
             espera.style.display = "none";
 
+            // Mostrar timer y opciones A, B, C y D
             var tim = document.getElementById('timer');
             tim.style.display = "inline";
-
-            document.getElementById('pregunta').innerHTML = table;
-
             var preg = document.getElementById('pregunta');
             preg.style.display = "inline";
 
             let counter = parseInt(pregunta.timer);
-            let c = parseInt(pregunta.timer);
             let k = setInterval(function() {
-                document.getElementById("timer").innerHTML = `Quedan ${c} segundos`;
                 counter--;
-                c--;
-
+                document.getElementById("timer").innerHTML = `Quedan ${counter} segundos`;
                 if (counter <= 0) {
                     clearInterval(k);
+                    
+                    // Mostrar espera (en un futuro, los puntos)
                     var espera = document.getElementById('espera');
                     espera.style.display = "inline";
+
+                    // Ocultar timer y opciones A, B, C y D
                     var tim = document.getElementById('timer');
                     tim.style.display = "none";
                     var preg = document.getElementById('pregunta');
@@ -68,39 +64,47 @@ class MostrarPregunta extends React.Component {
         });
     }
 
-    //Crear listeners de los radiobuttons
-    crearListeners() {
 
-        for (var i = 1; i <= 4; i++) {
-            document.getElementById("boton" + i).addEventListener("click", this.envio);
-        }
-    }
 
-    envio = e => {
-        e.preventDefault();
+    respuestaA() { 
         var espera = document.getElementById('espera');
         espera.style.display = "inline";
         var tim = document.getElementById('timer');
         tim.style.display = "none";
         var preg = document.getElementById('pregunta');
         preg.style.display = "none";
-        this.state.user.emit('nuevoUsuario', "hola");
-        
-        console.log(document.forms);
-        console.log(e);
-
-        /*
-        for (var i = 0; i < this.state.listaCues.length; i++) {
-
-            if (document.forms["pregunta"].elements[i].checked) {
-                //pos = i;
-                //encontrado = true;
-                break;
-            }
-        }
-        */
-
-        console.log(e.target.value);
+        var socket = io.connect('/');
+        socket.emit('answerQuestion', 1); 
+    }
+    respuestaB() { 
+        var espera = document.getElementById('espera');
+        espera.style.display = "inline";
+        var tim = document.getElementById('timer');
+        tim.style.display = "none";
+        var preg = document.getElementById('pregunta');
+        preg.style.display = "none";
+        var socket = io.connect('/');
+        socket.emit('answerQuestion', 2); 
+    }
+    respuestaC() { 
+        var espera = document.getElementById('espera');
+        espera.style.display = "inline";
+        var tim = document.getElementById('timer');
+        tim.style.display = "none";
+        var preg = document.getElementById('pregunta');
+        preg.style.display = "none";
+        var socket = io.connect('/');
+        socket.emit('answerQuestion', 3); 
+    }
+    respuestaD() { 
+        var espera = document.getElementById('espera');
+        espera.style.display = "inline";
+        var tim = document.getElementById('timer');
+        tim.style.display = "none";
+        var preg = document.getElementById('pregunta');
+        preg.style.display = "none";
+        var socket = io.connect('/');
+        socket.emit('answerQuestion', 4); 
     }
    
     render() {
@@ -109,7 +113,12 @@ class MostrarPregunta extends React.Component {
             <div id="espera">
                 {espera.esperaEnvioPregunta()}
             </div>
-            <form align="center" id="pregunta" onSubmit={this.envio}> </form>
+            <div id="pregunta">
+                <button className="botonesresp" onClick={this.respuestaA} id="boton1" value="1">A</button> 
+                <button className="botonesresp" onClick={this.respuestaB} id="boton2" value="2">B</button>
+                <button className="botonesresp" onClick={this.respuestaC} id="boton3" value="3">C</button> 
+                <button className="botonesresp" onClick={this.respuestaD} id="boton4" value="4">D</button>
+            </div>
             <div id="timer"> </div>  
                 
             </React.Fragment>

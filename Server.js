@@ -44,6 +44,12 @@ io.on('connection', socket => {
       socket.broadcast.emit('deliverQuestion', pregunta);
     });
 
+    socket.on('answerQuestion', function(respuesta) {
+
+      console.log('Estoy en answerQuestion: ', respuesta);
+      socket.broadcast.emit('deliverAnswer', respuesta);
+    });
+
     socket.on('nuevoUsuario', function(usuario) {
       listaUsuarios.push(usuario);
       listaSockets.push(socket.id);
@@ -165,7 +171,6 @@ const preguntas = require('./BBDD/QuerysPreguntas');
 
 // Insertar pregunta (req = id_cues, id_pre, pre, resp, correcta)
 app.post('/insertar/pregunta', (req, res) => {
-
   console.log('Estoy en /insertar/pregunta: ', req.body)
   preguntas.insertarPregunta([req.body.id_cues, req.body.id_pre, req.body.pre, req.body.resp1, req.body.resp2, req.body.resp3, req.body.resp4, req.body.correcta]);
   res.send('hola');
@@ -173,7 +178,6 @@ app.post('/insertar/pregunta', (req, res) => {
 
 // Eliminar pregunta (req = id_cues, id_pre)
 app.post('/eliminar/pregunta', (req, res) => {
-
   console.log('Estoy en /eliminar/pregunta: ', req.body)
   preguntas.eliminarPregunta([req.body.id_cues, req.body.id_pre]);
   res.send('true');
@@ -181,7 +185,6 @@ app.post('/eliminar/pregunta', (req, res) => {
 
 // Listar preguntas (req = id_cues)
 app.post('/listar/preguntas', (req, res) => {
-
   console.log('Estoy en /listar/preguntas: ', req.body)
   var cues = preguntas.listarPreguntasCuestionario(req.body.id_cues);
   console.log('Estoy en /listar/preguntas: ', cues);
@@ -190,7 +193,6 @@ app.post('/listar/preguntas', (req, res) => {
 
 //Modificar pregunta (req = id_cues, id_pre, pre, resp, correcta)
 app.post('/modificar/pregunta', (req, res) => {
-  
   console.log('Estoy en /modificar/pregunta: ', req.body)
   preguntas.modificarPregunta([req.body.id_cues, req.body.id_pre, req.body.pre, req.body.resp1, req.body.resp2, req.body.resp3, req.body.resp4, req.body.correcta]);
   res.send('hola');
@@ -198,8 +200,18 @@ app.post('/modificar/pregunta', (req, res) => {
 
 //Última pregunta (req = id_cues)
 app.post('/ultima/pregunta', (req, res) => {
-  
   console.log('Estoy en /ultima/pregunta: ', req.body)
   var max = preguntas.obtenerUltimaPreguntaInsertada(req.body.id_cues);
   res.send(max);
 });
+
+// Esto debe ir al final. Recoge los GET que no sabe redireccionar 
+// y se los pasa a react para que los enrute adecuadamente.
+app.get('/*', function(req, res) {
+  console.log('Recibido GET desconocido. Delegando a React.')
+  res.sendFile(path.join(__dirname, 'Views/index.html'), function(err) {
+    if (err) {
+      res.status(500).send(err)
+    }
+  })
+})
