@@ -45,8 +45,38 @@ h1 {
     width: 80%;
 }
 
-.botonesresp {
-    width: 40%;
-    height: 40%;
+.botonesrespA {
+    width: 45%;
+    height: 80%;
     float: center;
+    color: #ffffff;
+    background-color: #f58231;
+    border-color: #f58231;
+}
+
+.botonesrespB {
+    width: 45%;
+    height: 80%;
+    float: center;
+    color: #ffffff;
+    background-color: #911eb4;
+    border-color: #911eb4;
+}
+
+.botonesrespC {
+    width: 45%;
+    height: 80%;
+    float: center;
+    color: #ffffff;
+    background-color: #4390d8;
+    border-color: #4390d8;
+}
+
+.botonesrespD {
+    width: 45%;
+    height: 80%;
+    float: center;
+    color: #ffffff;
+    background-color: #3cb44b;
+    border-color: #3cb44b;
 }

@@ -37,10 +37,11 @@ class MostrarPregunta extends React.Component {
             espera.style.display = "none";
 
             // Mostrar timer y opciones A, B, C y D
+            document.getElementById("timer").innerHTML = `Quedan ${pregunta.timer} segundos`;
             var tim = document.getElementById('timer');
-            tim.style.display = "inline";
+            tim.style.display = "block";
             var preg = document.getElementById('pregunta');
-            preg.style.display = "inline";
+            preg.style.display = "block";
 
             let counter = parseInt(pregunta.timer);
             let k = setInterval(function() {
@@ -63,8 +64,6 @@ class MostrarPregunta extends React.Component {
             }, 1000);
         });
     }
-
-
 
     respuestaA() { 
         var espera = document.getElementById('espera');
@@ -110,17 +109,20 @@ class MostrarPregunta extends React.Component {
     render() {
         return(
             <React.Fragment>
+            <br/>
             <div id="espera">
                 {espera.esperaEnvioPregunta()}
             </div>
-            <div id="pregunta">
-                <button className="botonesresp" onClick={this.respuestaA} id="boton1" value="1">A</button> 
-                <button className="botonesresp" onClick={this.respuestaB} id="boton2" value="2">B</button>
-                <button className="botonesresp" onClick={this.respuestaC} id="boton3" value="3">C</button> 
-                <button className="botonesresp" onClick={this.respuestaD} id="boton4" value="4">D</button>
+            <div align="center" id="pregunta" height="100%" width="100%">
+                <h1 align="center">Elige la respuesta correcta</h1>
+                <br></br>
+                <button className="botonesrespA" onClick={this.respuestaA} id="boton1" value="1">A</button> 
+                <button className="botonesrespB" onClick={this.respuestaB} id="boton2" value="2">B</button>
+                <button className="botonesrespC" onClick={this.respuestaC} id="boton3" value="3">C</button> 
+                <button className="botonesrespD" onClick={this.respuestaD} id="boton4" value="4">D</button>
             </div>
-            <div id="timer"> </div>  
-                
+            <br/><br/>
+            <div id="timer" align="center"> </div>  
             </React.Fragment>
         );
     }
