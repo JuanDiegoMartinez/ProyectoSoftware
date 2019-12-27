@@ -40,13 +40,13 @@ class Proyector extends React.Component {
             document.getElementById('respuestasC').innerHTML = `C: 0`;
             document.getElementById('respuestasD').innerHTML = `D: 0`;
 
-            var table = `<table>
+            var table = `
                             <tr> <th>${pregunta.preg} </th> </tr>
                             <tr> <td> <button disabled id="boton1" value="1">${pregunta.res1}</button> 
                                       <button disabled id="boton2" value="2">${pregunta.res2}</button>  </td> </tr>
                             <tr> <td> <button disabled id="boton3" value="3">${pregunta.res3}</button> 
                                       <button disabled id="boton4" value="4">${pregunta.res4}</button> </td> </tr>
-                        </table>`;
+                        `;
 
             var espera = document.getElementById('espera');
             espera.style.display = "none";
@@ -102,7 +102,9 @@ class Proyector extends React.Component {
             <div id="espera">
                 {espera.esperaEnvioPregunta()}
             </div>
-            <form align="center" id="pregunta"> </form>
+            <form align="center"> 
+                <table id="tabla" id="pregunta"> </table>
+            </form>
             <div id="timer"> </div>  
             <div align="center" id="respuestasA"> </div>  
             <div align="center" id="respuestasB"> </div>  

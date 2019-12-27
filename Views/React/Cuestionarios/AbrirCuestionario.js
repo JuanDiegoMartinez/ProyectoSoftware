@@ -26,8 +26,6 @@ class AbrirCuestionario extends React.Component {
             idCues: this.props.match.params.id,
             socketP: socket
         });
-
-        console.log('Socket del cuestionario: ', this.state.socketP.id);
     }
 
     async componentDidMount() {
@@ -80,13 +78,12 @@ class AbrirCuestionario extends React.Component {
 
         var pos = this.state.radioPul;
         var seleccionada = this.state.listaPre[pos];
-        var timer = document.getElementById("timer").value;
         var pregunta = {preg: seleccionada.pregunta, 
                         res1: seleccionada.respuesta1, 
                         res2: seleccionada.respuesta2, 
                         res3: seleccionada.respuesta3, 
                         res4: seleccionada.respuesta4, 
-                        timer: timer
+                        timer: seleccionada.tiempo
                     };
 
         this.state.socketP.emit('submitQuestion', pregunta);
@@ -98,8 +95,6 @@ class AbrirCuestionario extends React.Component {
                 <h1 id="titulo" align="center"> Realizar Cuestionario</h1>
 
                 <form align="center" id="form">
-                    <p> Tiempo en segundos de las preguntas: </p>
-                    <p> <input id="timer" type="number" min="5" max="20"></input> </p>
                     <table align="center" id="tabla">
                     </table>
                     <br></br>

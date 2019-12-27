@@ -53,6 +53,7 @@ class Preguntas extends React.Component {
                         <tr> <td> <p> Respuesta 1: ${this.state.listaPre[i].respuesta1} </p><p> Respuesta 2: ${this.state.listaPre[i].respuesta2} </p>
                         <p> Respuesta 3: ${this.state.listaPre[i].respuesta3} </p><p> Respuesta 4: ${this.state.listaPre[i].respuesta4} </p> </td> </tr>
                         <tr> <td align="center"> Correcta: ${this.state.listaPre[i].correcta} </td> </tr>
+                        <tr> <td align="center"> Tiempo: ${this.state.listaPre[i].tiempo} </td> </tr>
                         <tr> <td align="center"> <input type="radio" id="Elegido${i}" name="unico" value=${i} /> </td> </tr>
                         </tbody>`;
         }
@@ -92,7 +93,8 @@ class Preguntas extends React.Component {
         <p> Respuesta2: <input class= "textolargo" id="Respuesta2" type="text" /> </p>
         <p> Respuesta3: <input class= "textolargo" id="Respuesta3" type="text" /> </p> 
         <p> Respuesta4: <input class= "textolargo" id="Respuesta4" type="text" /> </p> </td>  </tr>
-        <tr> <td> Correcta: <input type="number" id="Correcta" min="1" max="4" /> </td> </tr>`;
+        <tr> <td> Correcta: <input type="number" id="Correcta" min="1" max="4" /> </td> </tr>
+        <tr> <td> Tiempo: <input type="number" id="Tiempo" min="1" /> </td> </tr>`;
 
         var boton = document.getElementById('Insert');
         boton.style.display = "inline";
@@ -128,6 +130,7 @@ class Preguntas extends React.Component {
                         <p> Respuesta 3: <input id="Respuesta3" className= "textolargo" value=${this.state.listaPre[pos].respuesta3} /> 
                         Respuesta 4: <input id="Respuesta4" className= "textolargo" value=${this.state.listaPre[pos].respuesta4} /> </p> </td> </tr>
                         <tr> <td align="center"> Correcta: <input id="Correcta" type="number" min="1" max="4" value=${this.state.listaPre[pos].correcta} /> </td> </tr>
+                        <tr> <td align="center"> Tiempo: <input id="Tiempo" type="number" min="1" value=${this.state.listaPre[pos].tiempo} /> </td> </tr>
                         <tr> <td align="center"> <input type="radio" id="Elegido${pos}" name="unico" value=${pos} /> </td> </tr>`
 
         document.getElementById("Fila" + pos).innerHTML = fila;
@@ -166,8 +169,7 @@ class Preguntas extends React.Component {
                 <div align="center">
                     <h1> Preguntas del cuestionario: </h1>
                     <form id="form">
-                    <table id="tabla">
-                    </table>
+                    <table id="tabla"> </table>
                     <button type="submit" onClick={this.nuevaPregunta}> Añadir Nueva Pregunta </button>
                     <button type="submit" onClick={this.modificarPregunta}> Modificar Pregunta </button>
                     <button type="submit" onClick={this.borrarPregunta}> Eliminar Pregunta </button>
