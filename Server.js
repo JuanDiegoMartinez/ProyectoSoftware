@@ -50,10 +50,16 @@ io.on('connection', socket => {
     // Cuando un alumno responde
     // Emitir respuesta a los proyectores de la misma sala
     socket.on('answerQuestion', function(respuesta) {
-      var sala = Object.keys(io.sockets.adapter.sids[socket.id])[0]
-      socket.broadcast.to(sala).emit('deliverAnswer', respuesta);
+      var sala = Object.keys(io.sockets.adapter.sids[socket.id])[0];
+      var puntos = mapaPuntos.get(sala).get(respuesta.nombre);
+
+      if(mapaCorrectas.get(sala) == respuesta.resp) puntos++; 
+      else puntos--;
+
+      mapaPuntos.get(sala).set(respuesta.nombre, puntos)
+      socket.broadcast.to(sala).emit('deliverAnswer', {nombre: respuesta.nombre, puntos: puntos, resp: respuesta.resp});
       console.log('Estoy en answerQuestion:', respuesta);
-      console.log('Emitida respuesta a sala', sala)
+      console.log('Emitida respuesta a sala', sala);
     });
 
     // Cuando un usuario entra en una sala
@@ -67,6 +73,7 @@ io.on('connection', socket => {
         // Crear datos de la puntuación si es necesario
         if(!mapaPuntos.get(datos.sala).has(datos.nombre)) { // El alumno no estaba en la sala
           console.log('Nuevo alumno o proyector (', datos.nombre, ') en la sala:', datos.sala);
+          socket.broadcast.to(datos.sala).emit('nuevoAlumnoEnSala', datos.nombre)
           mapaPuntos.get(datos.sala).set(datos.nombre, 0)
         }
 

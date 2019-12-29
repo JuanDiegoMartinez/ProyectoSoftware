@@ -84,6 +84,7 @@ class AbrirCuestionario extends React.Component {
                         res2: seleccionada.respuesta2, 
                         res3: seleccionada.respuesta3, 
                         res4: seleccionada.respuesta4, 
+                        correcta: seleccionada.correcta,
                         timer: seleccionada.tiempo
                     };
 

@@ -11,7 +11,7 @@ class ElegirSala extends React.Component {
             user: ''
         };
     }
-  
+
     submitForm (e) {
         e.preventDefault();
         //document.getElementById('info').innerHTML = 'La sala no existe';

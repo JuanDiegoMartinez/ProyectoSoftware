@@ -78,7 +78,7 @@ class MostrarPregunta extends React.Component {
         var preg = document.getElementById('pregunta');
         preg.style.display = "none";
         var socket = this.state.user
-        socket.emit('answerQuestion', {sala: this.props.match.params.id, resp: n}); 
+        socket.emit('answerQuestion', {nombre: this.state.nombre, sala: this.props.match.params.id, resp: n}); 
     }
 
     respuestaA = () => { this.responder(1) }

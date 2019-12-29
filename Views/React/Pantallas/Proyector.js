@@ -19,13 +19,33 @@ class Proyector extends React.Component {
 
     componentDidMount() {
         var socket = io.connect('/');
+        var nResp = [0, 0, 0, 0] // Resultados de la pregunta actual
+        var mapaPuntos = new Map()
 
         // Integer como nombre para diferenciarse de los alumnos
         socket.emit('nuevoUsuario', {nombre: this.props.match.params.id, 
             sala: this.props.match.params.id});
 
-        // Resultados de la pregunta actual
-        var nResp = [0, 0, 0, 0]
+        // Cuando un alumno entra en la sala, poner sus puntos a 0
+        socket.on('nuevoAlumnoEnSala', function(nombre) {
+            mapaPuntos.set(nombre, 0)
+            document.getElementById('alumnos').innerHTML += `<p id="alumno${nombre}"/>${nombre}: 0</p>`
+        });
+
+        // Al recibir una respuesta de un alumno, aumentar el número de respuestas correspondiente y actualizar vista
+        socket.on('deliverAnswer', function(respuesta) {
+            // Si el alumno no estaba en el mapa se le añade
+            if(!mapaPuntos.has(respuesta.nombre)) {
+                document.getElementById('alumnos').innerHTML += `<p id="alumno${respuesta.nombre}"/>${respuesta.nombre}: ${respuesta.puntos}</p>`
+            } else {
+                document.getElementById(`alumno${respuesta.nombre}`).innerHTML = `${respuesta.nombre}: ${respuesta.puntos}`
+            }
+            mapaPuntos.set(respuesta.nombre, respuesta.puntos)
+            
+            // Respuestas por tipo
+            nResp[respuesta.resp-1] += 1
+            document.getElementById(`respuestas${respuesta.resp}`).innerHTML = `${nResp[respuesta.resp-1]}`;
+        })
 
         // Al recibir una pregunta del profesor...
         socket.on('deliverQuestion', function(pregunta) {
@@ -43,10 +63,10 @@ class Proyector extends React.Component {
 
             // Crear la tabla con la pregunta y las respuestas
             var table = `<tr> <th>${pregunta.preg} </th> </tr>
-                         <tr> <td> <button disabled id="boton1" value="1">A: ${pregunta.res1}</button> 
-                                   <button disabled id="boton2" value="2">B: ${pregunta.res2}</button>  </td> </tr>
-                         <tr> <td> <button disabled id="boton3" value="3">C: ${pregunta.res3}</button> 
-                                   <button disabled id="boton4" value="4">D: ${pregunta.res4}</button> </td> </tr>`;
+                         <tr> <td> A: ${pregunta.res1} </td> </tr>
+                         <tr> <td> B: ${pregunta.res2} </td> </tr>
+                         <tr> <td> C: ${pregunta.res3} </td> </tr>
+                         <tr> <td> D: ${pregunta.res4} </td> </tr>`;
 
             // Ocultar espera
             var espera = document.getElementById('espera');
@@ -76,14 +96,6 @@ class Proyector extends React.Component {
                 }
             }, 1000);
         });
-
-        // Al recibir una respuesta de un alumno...
-        socket.on('deliverAnswer', function(respuesta) {
-
-            // Aumentar el número de respuestas correspondiente y actualizar vista
-            nResp[respuesta-1] += 1
-            document.getElementById(`respuestas${respuesta}`).innerHTML = `${nResp[respuesta-1]}`;
-        })
     }
    
     render() {
@@ -121,6 +133,8 @@ class Proyector extends React.Component {
                 </tr>
                 </tbody>
             </table>
+            <p align="center"><b>Puntos:</b></p>
+            <p id="alumnos" align="center"></p>
             </React.Fragment>
         );
     }
