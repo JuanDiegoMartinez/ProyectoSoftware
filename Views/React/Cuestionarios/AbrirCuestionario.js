@@ -21,6 +21,7 @@ class AbrirCuestionario extends React.Component {
 
     componentWillMount() {
         var socket = io.connect('/');
+        socket.emit('nuevaSesion', this.props.match.params.id);
 
         this.setState({
             idCues: this.props.match.params.id,
@@ -98,12 +99,12 @@ class AbrirCuestionario extends React.Component {
                     <table align="center" id="tabla">
                     </table>
                     <br></br>
-                    <button type="submit" onClick={this.enviarPregunta}> Enviar Pregunta </button>
+                    <button id="enviarPreg" type="submit" onClick={this.enviarPregunta}> Enviar Pregunta </button>
                 </form>
                 <br></br>
                 <p align="center"> <Link to={`/Proyector/${this.state.idCues}`} target="_blank"> Abrir proyector </Link> </p>
                 
-                <NewWindow title="Proyector" copyStyles="true" url={`/Proyector/${this.state.idCues}`} />
+                <NewWindow outerWidth="650" title="Proyector" copyStyles="true" url={`/Proyector/${this.state.idCues}`} />
 
             </React.Fragment>
         );

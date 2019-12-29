@@ -4,7 +4,6 @@ function controlador() {
     var socket;
     socket.id = "Proyector";
     var socket = io.connect('/');
-    
 } 
 
 export default controlador;

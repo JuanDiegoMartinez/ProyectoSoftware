@@ -19,20 +19,29 @@ class Proyector extends React.Component {
 
     componentDidMount() {
         var socket = io.connect('/');
-        socket.id = "Proyector";
+
+        // Integer como nombre para diferenciarse de los alumnos
+        socket.emit('nuevoUsuario', {nombre: this.props.match.params.id, 
+            sala: this.props.match.params.id});
 
         // Resultados de la pregunta actual
         var nResp = [0, 0, 0, 0]
+
+        // Al recibir una pregunta del profesor...
         socket.on('deliverQuestion', function(pregunta) {
-            document.getElementById('respuestasA').innerHTML = `0`;
-            document.getElementById('respuestasB').innerHTML = `0`;
-            document.getElementById('respuestasC').innerHTML = `0`;
-            document.getElementById('respuestasD').innerHTML = `0`;
+
+            // Borrar los resultados de la pregunta anterior
+            nResp = [0, 0, 0, 0]
+            document.getElementById('respuestas1').innerHTML = `0`;
+            document.getElementById('respuestas2').innerHTML = `0`;
+            document.getElementById('respuestas3').innerHTML = `0`;
+            document.getElementById('respuestas4').innerHTML = `0`;
 
             // Ocultar bienvenida
             var bienvenida = document.getElementById('bienvenida');
             bienvenida.style.display = "none";
 
+            // Crear la tabla con la pregunta y las respuestas
             var table = `<tr> <th>${pregunta.preg} </th> </tr>
                          <tr> <td> <button disabled id="boton1" value="1">A: ${pregunta.res1}</button> 
                                    <button disabled id="boton2" value="2">B: ${pregunta.res2}</button>  </td> </tr>
@@ -43,7 +52,7 @@ class Proyector extends React.Component {
             var espera = document.getElementById('espera');
             espera.style.display = "none";
 
-            // Mostrar timer y pregunta con las respuestas
+            // Mostrar timer y tabla creada
             document.getElementById("timer").innerHTML = `Quedan ${pregunta.timer} segundos`;
             var tim = document.getElementById('timer');
             tim.style.display = "block";
@@ -51,12 +60,11 @@ class Proyector extends React.Component {
             var preg = document.getElementById('pregunta');
             preg.style.display = "inline";
 
-            // Gestionar el timer
+            // Gestionar el timer (cuenta atrás con el tiempo de la pregunta)
             let counter = parseInt(pregunta.timer);
             let k = setInterval(function() {
                 counter--;
                 document.getElementById("timer").innerHTML = `Quedan ${counter} segundos`;
-
                 if (counter <= 0) {
                     clearInterval(k);
                     var espera = document.getElementById('espera');
@@ -69,23 +77,12 @@ class Proyector extends React.Component {
             }, 1000);
         });
 
+        // Al recibir una respuesta de un alumno...
         socket.on('deliverAnswer', function(respuesta) {
-            if(respuesta == 1) {
-                nResp[0] += 1
-                document.getElementById("respuestasA").innerHTML = `${nResp[0]}`;
-            }
-            if(respuesta == 2) {
-                nResp[1] += 1
-                document.getElementById("respuestasB").innerHTML = `${nResp[1]}`;
-            }
-            if(respuesta == 3) {
-                nResp[2] += 1
-                document.getElementById("respuestasC").innerHTML = `${nResp[2]}`;
-            }
-            if(respuesta == 4) {
-                nResp[3] += 1
-                document.getElementById("respuestasD").innerHTML = `${nResp[3]}`;
-            }
+
+            // Aumentar el número de respuestas correspondiente y actualizar vista
+            nResp[respuesta-1] += 1
+            document.getElementById(`respuestas${respuesta}`).innerHTML = `${nResp[respuesta-1]}`;
         })
     }
    
@@ -117,10 +114,10 @@ class Proyector extends React.Component {
                     <th>D</th>
                 </tr>
                 <tr>
-                    <td align="center" id="respuestasA">0</td>  
-                    <td align="center" id="respuestasB">0</td>  
-                    <td align="center" id="respuestasC">0</td>  
-                    <td align="center" id="respuestasD">0</td>  
+                    <td align="center" id="respuestas1">0</td>  
+                    <td align="center" id="respuestas2">0</td>  
+                    <td align="center" id="respuestas3">0</td>  
+                    <td align="center" id="respuestas4">0</td>  
                 </tr>
                 </tbody>
             </table>

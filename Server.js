@@ -29,44 +29,74 @@ app.use(session({
   saveUninitialized: "false"
 }));
 
-var listaUsuarios = Array();
-var listaSockets = Array();
-var puntuacion = Array();
-var listaPreguntas = Array();
+// Datos sobre las sesiones
+var mapaPuntos = new Map(); 
+var mapaCorrectas = new Map(); 
 
 // Conexiones de los sockets
 io.on('connection', socket => {
-    console.log('socket connected: ', socket.id);
+    console.log('Conectado socket:', socket.id);
 
+    // Cuando un profesor envia una pregunta
+    // Emitir pregunta a los alumnos y proyectores de la misma sala
     socket.on('submitQuestion', function(pregunta) {
-
-      console.log('Estoy en submitQuestion: ', pregunta);
-      socket.broadcast.emit('deliverQuestion', pregunta);
+      var sala = Object.keys(io.sockets.adapter.sids[socket.id])[0]
+      mapaCorrectas.set(sala, pregunta.correcta)
+      socket.broadcast.to(sala).emit('deliverQuestion', pregunta);
+      console.log('Estoy en submitQuestion:', pregunta);
+      console.log('Emitida pregunta a sala', sala)
     });
 
+    // Cuando un alumno responde
+    // Emitir respuesta a los proyectores de la misma sala
     socket.on('answerQuestion', function(respuesta) {
-
-      console.log('Estoy en answerQuestion: ', respuesta);
-      socket.broadcast.emit('deliverAnswer', respuesta);
+      var sala = Object.keys(io.sockets.adapter.sids[socket.id])[0]
+      socket.broadcast.to(sala).emit('deliverAnswer', respuesta);
+      console.log('Estoy en answerQuestion:', respuesta);
+      console.log('Emitida respuesta a sala', sala)
     });
 
-    socket.on('nuevoUsuario', function(usuario) {
-      listaUsuarios.push(usuario);
-      listaSockets.push(socket.id);
-      console.log(usuario);
-    });
+    // Cuando un usuario entra en una sala
+    // Incluir al nuevo usuario en la sala correspondiente
+    socket.on('nuevoUsuario', function(datos) {
+      if(mapaPuntos.has(datos.sala)) {
+        // Salir de todas las salas anteriores (si las hay)
+        var salasUsuario = io.sockets.adapter.sids[socket.id]; 
+        for(var s in salasUsuario) { socket.leave(s); }
 
-    if (socket.id === "Proyector") {
+        // Crear datos de la puntuación si es necesario
+        if(!mapaPuntos.get(datos.sala).has(datos.nombre)) { // El alumno no estaba en la sala
+          console.log('Nuevo alumno o proyector (', datos.nombre, ') en la sala:', datos.sala);
+          mapaPuntos.get(datos.sala).set(datos.nombre, 0)
+        }
 
-      socket.on('ObtenerPreguntas', (datos) => {
-        listaPreguntas = preguntas.listarPreguntasCuestionario(datos);
-        socket.broadcast.to("Proyector").emit('Preguntas', listaPreguntas);
-      });
-
-      for (var i = 0; i < listaPreguntas.length; i++) {
-        setTimeout(console.log.bind(null, 'Two second later'), 2000);
+        // Entrar en la sala
+        socket.join(datos.sala)
+      } else {
+        socket.emit('errorSala', 0)
+        console.log('La sala a la que se ha intentado acceder no existe:', datos.sala);
       }
-    }
+    });
+
+    // Cuando un profesor abre un cuestionario
+    // Crear una nueva sala con el id del cuestionario y entrar en ella
+    socket.on('nuevaSesion', function(cuestionario) {
+      // Salir de todas las salas anteriores (si las hay)
+      var salasUsuario = io.sockets.adapter.sids[socket.id]; 
+      for(var s in salasUsuario) { socket.leave(s); }
+
+      // Crear datos de la sala
+      mapaPuntos.set(cuestionario, new Map())
+
+      // Entrar en la nueva sala
+      socket.join(cuestionario)
+      console.log('Abierta sala', cuestionario)
+    })
+
+    // Cuando un socket se desconecta
+    socket.on('disconnect', function() {
+      console.log('Desconectado socket:', socket.id);
+   });
 });
 
 // Server localhost:4000
@@ -169,10 +199,10 @@ app.post('/modificar/cuestionario', (req, res) => {
 //BBDD de la parte de las preguntas
 const preguntas = require('./BBDD/QuerysPreguntas');
 
-// Insertar pregunta (req = id_cues, id_pre, pre, resp, correcta)
+// Insertar pregunta (req = id_cues, id_pre, pre, resp, correcta, tiempo)
 app.post('/insertar/pregunta', (req, res) => {
   console.log('Estoy en /insertar/pregunta: ', req.body)
-  preguntas.insertarPregunta([req.body.id_cues, req.body.id_pre, req.body.pre, req.body.resp1, req.body.resp2, req.body.resp3, req.body.resp4, req.body.correcta]);
+  preguntas.insertarPregunta([req.body.id_cues, req.body.id_pre, req.body.pre, req.body.resp1, req.body.resp2, req.body.resp3, req.body.resp4, req.body.correcta, req.body.tiempo]);
   res.send('hola');
 });
 
@@ -194,7 +224,8 @@ app.post('/listar/preguntas', (req, res) => {
 //Modificar pregunta (req = id_cues, id_pre, pre, resp, correcta)
 app.post('/modificar/pregunta', (req, res) => {
   console.log('Estoy en /modificar/pregunta: ', req.body)
-  preguntas.modificarPregunta([req.body.id_cues, req.body.id_pre, req.body.pre, req.body.resp1, req.body.resp2, req.body.resp3, req.body.resp4, req.body.correcta]);
+  console.log('Tiempo', req.body.tiempo)
+  preguntas.modificarPregunta([req.body.id_cues, req.body.id_pre, req.body.pre, req.body.resp1, req.body.resp2, req.body.resp3, req.body.resp4, req.body.correcta, req.body.tiempo]);
   res.send('hola');
 });
 
@@ -208,7 +239,7 @@ app.post('/ultima/pregunta', (req, res) => {
 // Esto debe ir al final. Recoge los GET que no sabe redireccionar 
 // y se los pasa a react para que los enrute adecuadamente.
 app.get('/*', function(req, res) {
-  console.log('Recibido GET desconocido. Delegando a React.')
+  //console.log('Recibido GET desconocido. Delegando enrutamiento a React.')
   res.sendFile(path.join(__dirname, 'Views/index.html'), function(err) {
     if (err) {
       res.status(500).send(err)

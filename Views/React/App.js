@@ -18,7 +18,7 @@ import Proyector from './Pantallas/Proyector';
 import MostrarPregunta from './Pantallas/MostrarPregunta';
 
 class App extends React.Component {
-  
+
   render() {
     return (
       <BrowserRouter>
@@ -36,7 +36,7 @@ class App extends React.Component {
             <Route exact path="/AbrirCuestionario/:id" component={AbrirCuestionario} />
             
             <Route exact path="/Proyector/:id" component={Proyector} />
-            <Route exact path="/MostrarPregunta" component={MostrarPregunta} />
+            <Route exact path="/MostrarPregunta/:id" component={MostrarPregunta} />
           </Switch>
           </div>
       </BrowserRouter>

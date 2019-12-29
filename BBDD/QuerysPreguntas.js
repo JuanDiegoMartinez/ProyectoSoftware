@@ -11,7 +11,8 @@ let insertarPregunta = function(datos) {
         respuesta2: datos[4],
         respuesta3: datos[5],
         respuesta4: datos[6],
-        correcta: datos[7]
+        correcta: datos[7],
+        tiempo: datos[8]
     })
 }
   
@@ -43,7 +44,8 @@ let modificarPregunta = function(datos) {
         respuesta2: datos[4],
         respuesta3: datos[5],
         respuesta4: datos[6],
-        correcta: datos[7]
+        correcta: datos[7],
+        tiempo: datos[8]
     }, {
         id_cues: datos[0],
         id_pre: datos[1]

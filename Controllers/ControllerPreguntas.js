@@ -37,13 +37,14 @@ async function handleInsert(idC, idP) {
     var respuesta3 = document.getElementById("Respuesta3").value;
     var respuesta4 = document.getElementById("Respuesta4").value;
     var cor = document.getElementById("Correcta").value;
+    var tie = document.getElementById("Tiempo").value;
 
     const response = await fetch('/insertar/pregunta', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id_cues: idC, id_pre: idP, pre: pregunta, resp1: respuesta1, resp2: respuesta2, resp3: respuesta3, resp4: respuesta4, correcta: cor }),
+        body: JSON.stringify({ id_cues: idC, id_pre: idP, pre: pregunta, resp1: respuesta1, resp2: respuesta2, resp3: respuesta3, resp4: respuesta4, correcta: cor, tiempo: tie }),
     });
     
     const body = await response.text();
@@ -59,14 +60,14 @@ async function handleModifications(idC, idP) {
     var respuesta3 = document.getElementById("Respuesta3").value;
     var respuesta4 = document.getElementById("Respuesta4").value;
     var cor = document.getElementById("Correcta").value;
-    
+    var tie = document.getElementById("Tiempo").value;
 
     const response = await fetch('/modificar/pregunta', {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id_cues: idC, id_pre: idP, pre: pregunta, resp1: respuesta1, resp2: respuesta2, resp3: respuesta3, resp4: respuesta4, correcta: cor }),
+        body: JSON.stringify({ id_cues: idC, id_pre: idP, pre: pregunta, resp1: respuesta1, resp2: respuesta2, resp3: respuesta3, resp4: respuesta4, correcta: cor, tiempo: tie }),
     });
     
 }

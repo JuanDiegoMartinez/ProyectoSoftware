@@ -5,7 +5,7 @@ class Barra extends React.Component {
 
     constructor(props) {
         super(props);
-        
+
         this.state = {
             user: ''
         };
@@ -23,7 +23,7 @@ class Barra extends React.Component {
             <React.Fragment>
                 <header>
                     <nav>
-                        Sesión iniciada como: {this.props.usu} <br/>
+                        Sesión iniciada como: {this.props.user} <br/>
                         <Link to="/ModificarDatos"> Ajustes </Link> <br/>
                         <Link to="/Login"> Cerrar sesión </Link>
                     </nav>

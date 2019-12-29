@@ -24,12 +24,17 @@ class MostrarPregunta extends React.Component {
         var usuario = await Usuario.handleData();
 
         var socket = io.connect('/');
-        socket.emit('nuevoUsuario', usuario.nombre);
+        socket.emit('nuevoUsuario', {nombre: usuario.nombre, sala: this.props.match.params.id});
 
         this.setState({
             user: socket,
             nombre: usuario.nombre,
         });
+
+        this.state.user.on('errorSala', function(valor) {
+            // TODO: gestionar que la sala no existe
+            this.props.history.push(`/ElegirSala`);
+        })
 
         this.state.user.on('deliverQuestion', function(pregunta) {
             // Ocultar espera
@@ -65,46 +70,21 @@ class MostrarPregunta extends React.Component {
         });
     }
 
-    respuestaA() { 
+    responder = (n) => {
         var espera = document.getElementById('espera');
         espera.style.display = "inline";
         var tim = document.getElementById('timer');
         tim.style.display = "none";
         var preg = document.getElementById('pregunta');
         preg.style.display = "none";
-        var socket = io.connect('/');
-        socket.emit('answerQuestion', 1); 
+        var socket = this.state.user
+        socket.emit('answerQuestion', {sala: this.props.match.params.id, resp: n}); 
     }
-    respuestaB() { 
-        var espera = document.getElementById('espera');
-        espera.style.display = "inline";
-        var tim = document.getElementById('timer');
-        tim.style.display = "none";
-        var preg = document.getElementById('pregunta');
-        preg.style.display = "none";
-        var socket = io.connect('/');
-        socket.emit('answerQuestion', 2); 
-    }
-    respuestaC() { 
-        var espera = document.getElementById('espera');
-        espera.style.display = "inline";
-        var tim = document.getElementById('timer');
-        tim.style.display = "none";
-        var preg = document.getElementById('pregunta');
-        preg.style.display = "none";
-        var socket = io.connect('/');
-        socket.emit('answerQuestion', 3); 
-    }
-    respuestaD() { 
-        var espera = document.getElementById('espera');
-        espera.style.display = "inline";
-        var tim = document.getElementById('timer');
-        tim.style.display = "none";
-        var preg = document.getElementById('pregunta');
-        preg.style.display = "none";
-        var socket = io.connect('/');
-        socket.emit('answerQuestion', 4); 
-    }
+
+    respuestaA = () => { this.responder(1) }
+    respuestaB = () => { this.responder(2) }
+    respuestaC = () => { this.responder(3) }
+    respuestaD = () => { this.responder(4) }
    
     render() {
         return(
@@ -113,6 +93,7 @@ class MostrarPregunta extends React.Component {
             <div id="espera">
                 {espera.esperaEnvioPregunta()}
             </div>
+            <p align="center">Sala: {this.props.match.params.id}</p>
             <div align="center" id="pregunta" height="100%" width="100%">
                 <h1 align="center">Elige la respuesta correcta</h1>
                 <br></br>
