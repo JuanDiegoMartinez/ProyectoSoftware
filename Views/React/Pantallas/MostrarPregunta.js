@@ -36,38 +36,43 @@ class MostrarPregunta extends React.Component {
             this.props.history.push(`/ElegirSala`);
         })
 
-        this.state.user.on('deliverQuestion', function(pregunta) {
+        // Elementos usados en las siguientes funciones
+        var espera = document.getElementById('espera');
+        var tim = document.getElementById('timer');
+        var preg = document.getElementById('pregunta');
+        var punt = document.getElementById('puntos')
+
+        this.state.user.on('preguntaEnviada', function(pregunta) {
             // Ocultar espera
-            var espera = document.getElementById('espera');
             espera.style.display = "none";
+            punt.style.display = "none";
 
             // Mostrar timer y opciones A, B, C y D
-            document.getElementById("timer").innerHTML = `Quedan ${pregunta.timer} segundos`;
-            var tim = document.getElementById('timer');
+            tim.innerHTML = `Quedan ${pregunta.timer} segundos`;
             tim.style.display = "block";
-            var preg = document.getElementById('pregunta');
             preg.style.display = "block";
-
-            let counter = parseInt(pregunta.timer);
-            let k = setInterval(function() {
-                counter--;
-                document.getElementById("timer").innerHTML = `Quedan ${counter} segundos`;
-                if (counter <= 0) {
-                    clearInterval(k);
-                    
-                    // Mostrar espera (en un futuro, los puntos)
-                    var espera = document.getElementById('espera');
-                    espera.style.display = "inline";
-
-                    // Ocultar timer y opciones A, B, C y D
-                    var tim = document.getElementById('timer');
-                    tim.style.display = "none";
-                    var preg = document.getElementById('pregunta');
-                    preg.style.display = "none";
-                    
-                }
-            }, 1000);
         });
+        
+        // Al recibir los segundos restantes, actualizar la vista
+        this.state.user.on('segundosRestantes', function(segundos) {
+            // Cambiar a modo espera si se acaba el tiempo
+            if (segundos <= 0) {
+                espera.style.display = "inline";
+                punt.style.display = "block";
+                tim.style.display = "none";
+                preg.style.display = "none";
+
+            // Si no, actualizar los segundos
+            } else { 
+                tim.innerHTML = `Quedan ${segundos} segundos`;
+            }
+            
+        })
+
+        // Al recibir los nuevos puntos, actualizar la vista
+        this.state.user.on('nuevosPuntos', function(puntos) {
+            punt.innerHTML = `Puntos: ${puntos}`;
+        })
     }
 
     responder = (n) => {
@@ -78,7 +83,7 @@ class MostrarPregunta extends React.Component {
         var preg = document.getElementById('pregunta');
         preg.style.display = "none";
         var socket = this.state.user
-        socket.emit('answerQuestion', {nombre: this.state.nombre, sala: this.props.match.params.id, resp: n}); 
+        socket.emit('enviarRespuesta', {nombre: this.state.nombre, sala: this.props.match.params.id, resp: n}); 
     }
 
     respuestaA = () => { this.responder(1) }
@@ -103,7 +108,8 @@ class MostrarPregunta extends React.Component {
                 <button className="botonesrespD" onClick={this.respuestaD} id="boton4" value="4">D</button>
             </div>
             <br/><br/>
-            <div id="timer" align="center"> </div>  
+            <div id="timer" align="center"></div>
+            <div id="puntos" align="center"></div>
             </React.Fragment>
         );
     }

@@ -15,7 +15,8 @@ class AbrirCuestionario extends React.Component {
             idCues: -1,
             listaPre: Array(),
             idPre: -1,
-            radioPul: -1
+            radioPul: -1,
+            enviar: true
         };
     }
 
@@ -88,7 +89,13 @@ class AbrirCuestionario extends React.Component {
                         timer: seleccionada.tiempo
                     };
 
-        this.state.socketP.emit('submitQuestion', pregunta);
+        // Deshabilitar el botón de envío y habilitarlo tras terminar la pregunta (con 2 segundos de margen añadidos)
+        document.getElementById('enviarPreg').disabled = true;
+        setInterval(function() {
+            document.getElementById('enviarPreg').disabled = false;
+        }, (seleccionada.tiempo + 2) * 1000);
+
+        this.state.socketP.emit('enviarPregunta', pregunta);
     }
 
     render() {

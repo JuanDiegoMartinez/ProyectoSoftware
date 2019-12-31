@@ -33,7 +33,7 @@ class Proyector extends React.Component {
         });
 
         // Al recibir una respuesta de un alumno, aumentar el número de respuestas correspondiente y actualizar vista
-        socket.on('deliverAnswer', function(respuesta) {
+        socket.on('respuestaEnviada', function(respuesta) {
             // Si el alumno no estaba en el mapa se le añade
             if(!mapaPuntos.has(respuesta.nombre)) {
                 document.getElementById('alumnos').innerHTML += `<p id="alumno${respuesta.nombre}"/>${respuesta.nombre}: ${respuesta.puntos}</p>`
@@ -48,7 +48,7 @@ class Proyector extends React.Component {
         })
 
         // Al recibir una pregunta del profesor...
-        socket.on('deliverQuestion', function(pregunta) {
+        socket.on('preguntaEnviada', function(pregunta) {
 
             // Borrar los resultados de la pregunta anterior
             nResp = [0, 0, 0, 0]
@@ -79,23 +79,22 @@ class Proyector extends React.Component {
             document.getElementById('pregunta').innerHTML = table;
             var preg = document.getElementById('pregunta');
             preg.style.display = "inline";
-
-            // Gestionar el timer (cuenta atrás con el tiempo de la pregunta)
-            let counter = parseInt(pregunta.timer);
-            let k = setInterval(function() {
-                counter--;
-                document.getElementById("timer").innerHTML = `Quedan ${counter} segundos`;
-                if (counter <= 0) {
-                    clearInterval(k);
-                    var espera = document.getElementById('espera');
-                    espera.style.display = "inline";
-                    var tim = document.getElementById('timer');
-                    tim.style.display = "none";
-                    var preg = document.getElementById('pregunta');
-                    preg.style.display = "none";
-                }
-            }, 1000);
         });
+
+        // Al recibir los segundos restantes, actualizar la vista
+        socket.on('segundosRestantes', function(segundos) {
+            document.getElementById("timer").innerHTML = `Quedan ${segundos} segundos`;
+
+            // Y cambiar a modo espera si se acaba el tiempo
+            if (segundos <= 0) {
+                var espera = document.getElementById('espera');
+                espera.style.display = "inline";
+                var tim = document.getElementById('timer');
+                tim.style.display = "none";
+                var preg = document.getElementById('pregunta');
+                preg.style.display = "none";
+            }
+        })
     }
    
     render() {

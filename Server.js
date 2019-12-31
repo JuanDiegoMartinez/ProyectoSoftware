@@ -39,27 +39,39 @@ io.on('connection', socket => {
 
     // Cuando un profesor envia una pregunta
     // Emitir pregunta a los alumnos y proyectores de la misma sala
-    socket.on('submitQuestion', function(pregunta) {
+    socket.on('enviarPregunta', function(pregunta) {
       var sala = Object.keys(io.sockets.adapter.sids[socket.id])[0]
       mapaCorrectas.set(sala, pregunta.correcta)
-      socket.broadcast.to(sala).emit('deliverQuestion', pregunta);
-      console.log('Estoy en submitQuestion:', pregunta);
-      console.log('Emitida pregunta a sala', sala)
+      socket.broadcast.to(sala).emit('preguntaEnviada', pregunta);
+
+      // Contar los segundos restantes (para que no dependa de ningún usuario)
+      let segundos = parseInt(pregunta.timer);
+      let k = setInterval(function() {
+          segundos--;
+          socket.broadcast.to(sala).emit('segundosRestantes', segundos)
+          if (segundos <= 0) {
+              clearInterval(k);
+          }
+      }, 1000);
+
+      console.log('Estoy en enviarPregunta:', pregunta);
+      console.log('Enviada pregunta a sala', sala)
     });
 
     // Cuando un alumno responde
     // Emitir respuesta a los proyectores de la misma sala
-    socket.on('answerQuestion', function(respuesta) {
+    socket.on('enviarRespuesta', function(respuesta) {
       var sala = Object.keys(io.sockets.adapter.sids[socket.id])[0];
       var puntos = mapaPuntos.get(sala).get(respuesta.nombre);
 
       if(mapaCorrectas.get(sala) == respuesta.resp) puntos++; 
       else puntos--;
-
+      console.log(respuesta.nombre, puntos)
       mapaPuntos.get(sala).set(respuesta.nombre, puntos)
-      socket.broadcast.to(sala).emit('deliverAnswer', {nombre: respuesta.nombre, puntos: puntos, resp: respuesta.resp});
-      console.log('Estoy en answerQuestion:', respuesta);
-      console.log('Emitida respuesta a sala', sala);
+      socket.broadcast.to(sala).emit('respuestaEnviada', {nombre: respuesta.nombre, puntos: puntos, resp: respuesta.resp});
+      socket.emit('nuevosPuntos', puntos)
+      console.log('Estoy en enviarRespuesta:', respuesta);
+      console.log('Enviada respuesta a sala', sala);
     });
 
     // Cuando un usuario entra en una sala
@@ -73,8 +85,12 @@ io.on('connection', socket => {
         // Crear datos de la puntuación si es necesario
         if(!mapaPuntos.get(datos.sala).has(datos.nombre)) { // El alumno no estaba en la sala
           console.log('Nuevo alumno o proyector (', datos.nombre, ') en la sala:', datos.sala);
-          socket.broadcast.to(datos.sala).emit('nuevoAlumnoEnSala', datos.nombre)
-          mapaPuntos.get(datos.sala).set(datos.nombre, 0)
+
+          // Si el nuevo usuario no es un proyector, comunicar su llegada (solo los proyectores tienen un int como nombre)
+          if(!(datos.nombre == datos.sala)) {
+            socket.broadcast.to(datos.sala).emit('nuevoAlumnoEnSala', datos.nombre)
+            mapaPuntos.get(datos.sala).set(datos.nombre, 0)
+          }
         }
 
         // Entrar en la sala
