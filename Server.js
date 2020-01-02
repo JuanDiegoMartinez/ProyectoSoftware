@@ -73,8 +73,8 @@ io.on('connection', socket => {
       var sala = Object.keys(io.sockets.adapter.sids[socket.id])[0];
       var puntos = mapaPuntos.get(sala).get(respuesta.nombre);
 
-      if(mapaCorrectas.get(sala) == respuesta.resp) puntos++; 
-      else puntos--;
+      if(mapaCorrectas.get(sala) == respuesta.resp) puntos += mapaSegundos.get(sala); 
+      else puntos -= mapaSegundos.get(sala);
 
       mapaPuntos.get(sala).set(respuesta.nombre, puntos)
       socket.broadcast.to(sala).emit('respuestaEnviada', {nombre: respuesta.nombre, puntos: puntos, resp: respuesta.resp});

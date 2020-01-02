@@ -22,6 +22,7 @@ class Proyector extends React.Component {
         var nResp = [0, 0, 0, 0] // Resultados de la pregunta actual
         var mapaPuntos = new Map()
 
+
         // Integer como nombre para diferenciarse de los alumnos
         socket.emit('nuevoUsuario', {nombre: this.props.match.params.id, 
             sala: this.props.match.params.id});
@@ -61,16 +62,22 @@ class Proyector extends React.Component {
             var bienvenida = document.getElementById('bienvenida');
             bienvenida.style.display = "none";
 
-            // Crear la tabla con la pregunta y las respuestas
-            var table = `<tr> <th>${pregunta.preg} </th> </tr>
-                         <tr> <td> A: ${pregunta.res1} </td> </tr>
-                         <tr> <td> B: ${pregunta.res2} </td> </tr>
-                         <tr> <td> C: ${pregunta.res3} </td> </tr>
-                         <tr> <td> D: ${pregunta.res4} </td> </tr>`;
+            // Crear la tabla con la pregunta y las respuestas (no mostrar respuestas si están todas en blanco)
+            var table
+            if(pregunta.res1=='' && pregunta.res2=='' && pregunta.res3=='' && pregunta.res4=='')
+                table = `<tr> <th>${pregunta.preg} </th> </tr>`;
+            else
+                table = `<tr> <th>${pregunta.preg} </th> </tr>
+                    <tr> <td> A: ${pregunta.res1} </td> </tr>
+                    <tr> <td> B: ${pregunta.res2} </td> </tr>
+                    <tr> <td> C: ${pregunta.res3} </td> </tr>
+                    <tr> <td> D: ${pregunta.res4} </td> </tr>`;
 
-            // Ocultar espera
+            // Ocultar espera y puntos
             var espera = document.getElementById('espera');
             espera.style.display = "none";
+            var punt = document.getElementById('alumnos');
+            punt.style.display = "none";
 
             // Mostrar timer y tabla creada
             document.getElementById("timer").innerHTML = `Quedan ${pregunta.timer} segundos`;
@@ -93,6 +100,8 @@ class Proyector extends React.Component {
                 tim.style.display = "none";
                 var preg = document.getElementById('pregunta');
                 preg.style.display = "none";
+                var punt = document.getElementById('alumnos');
+                punt.style.display = "block";
             }
         })
     }
@@ -100,14 +109,14 @@ class Proyector extends React.Component {
     render() {
         return(
             <React.Fragment>
-            <h1 align="center">Proyector</h1>
+            <br/><br/>
             <p align="center" id="bienvenida">
                 Bienvenido al proyector<br/>
                 Envía una pregunta del cuestionario para comenzar<br/>
                 Los resultados de las preguntas aparecerán en la tabla que hay debajo<br/>
             </p>
             <div id="espera" style={{display: "none"}}>
-                {espera.esperaEnvioPregunta()}
+                
             </div>
             <form align="center"> 
                 <table id="tabla" id="pregunta"></table>
@@ -132,8 +141,9 @@ class Proyector extends React.Component {
                 </tr>
                 </tbody>
             </table>
-            <p align="center"><b>Puntos:</b></p>
-            <p id="alumnos" align="center"></p>
+            <p id="alumnos" align="center">
+                <p align="center" id="puntos"><b>Puntos:</b></p>
+            </p>
             </React.Fragment>
         );
     }
