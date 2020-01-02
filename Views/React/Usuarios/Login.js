@@ -17,31 +17,32 @@ class Login extends React.Component {
         e.preventDefault();
         const body = await handleLogin();
         
-        if (body == true) {
+        if (body) {
             var u = document.getElementById('Usuario').value;
             this.setState({
                 user: u,
             });
+            this.props.history.push(`/Principal`);
+        } else {
+            document.getElementById('info').innerHTML = "Usuario o contraseña incorrectos.";
+            document.getElementById('form').reset();
         }
-        document.getElementById('form').reset();
     };
    
     render() {
         return(
             <React.Fragment>
-                <Barra user={this.state.user} />
-                
                 <h1 align="center"> Iniciar Sesión </h1>
-  
+
                 <form align="center" id="form" onSubmit={this.handleSubmit}>
                     <p align="center"> Usuario: <br/> <input id="Usuario" type="text"/> </p>
                     <p align="center"> Contraseña: <br/> <input id="Password" type="password"/> </p>
                     <p align="center"> <button type="submit"> Aceptar </button> </p>
                 </form>
+                <p align="center" id="info"></p>
                 
                 <p align="center"> <Link to="/Register"> ¿Aún no tienes una cuenta? </Link> </p>
-                <p align="center"> <Link to="/Sala"> Elegir sala </Link> </p>
-                <p align="center"> <Link to="/Cuestionarios"> Crear cuestionario </Link> </p>
+                <p align="center"> <Link to="/Sala"> Elegir sala (anónimo) </Link> </p>
             </React.Fragment>
         );
     }

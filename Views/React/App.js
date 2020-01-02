@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 //Usuarios
@@ -16,6 +16,7 @@ import AbrirCuestionario from './Cuestionarios/AbrirCuestionario';
 //Pantallas
 import Proyector from './Pantallas/Proyector';
 import MostrarPregunta from './Pantallas/MostrarPregunta';
+import Barra from './Barra';
 
 class App extends React.Component {
 
@@ -23,6 +24,8 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <div>
+          <Barra/>
+          <br/><br/>
           <Switch>
             <Route exact path="/" component={Login} />
             <Route exact path="/Login" component={Login} />
@@ -38,7 +41,7 @@ class App extends React.Component {
             <Route exact path="/Proyector/:id" component={Proyector} />
             <Route exact path="/MostrarPregunta/:id" component={MostrarPregunta} />
           </Switch>
-          </div>
+        </div>
       </BrowserRouter>
     );
   }

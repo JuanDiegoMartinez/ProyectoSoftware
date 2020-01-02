@@ -24,17 +24,16 @@ class MostrarPregunta extends React.Component {
         var usuario = await Usuario.handleData();
 
         var socket = io.connect('/');
-        socket.emit('nuevoUsuario', {nombre: usuario.nombre, sala: this.props.match.params.id});
-
         this.setState({
             user: socket,
             nombre: usuario.nombre,
         });
 
         this.state.user.on('errorSala', function(valor) {
-            // TODO: gestionar que la sala no existe
-            this.props.history.push(`/ElegirSala`);
+            // Gestionar errores de la sala si fuese necesario
         })
+
+        socket.emit('nuevoUsuario', {nombre: usuario.nombre, sala: this.props.match.params.id});
 
         // Elementos usados en las siguientes funciones
         var espera = document.getElementById('espera');

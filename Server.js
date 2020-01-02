@@ -31,7 +31,8 @@ app.use(session({
 
 // Datos sobre las sesiones
 var mapaPuntos = new Map(); 
-var mapaCorrectas = new Map(); 
+var mapaCorrectas = new Map();
+var mapaSegundos = new Map();
 
 // Conexiones de los sockets
 io.on('connection', socket => {
@@ -41,21 +42,29 @@ io.on('connection', socket => {
     // Emitir pregunta a los alumnos y proyectores de la misma sala
     socket.on('enviarPregunta', function(pregunta) {
       var sala = Object.keys(io.sockets.adapter.sids[socket.id])[0]
-      mapaCorrectas.set(sala, pregunta.correcta)
-      socket.broadcast.to(sala).emit('preguntaEnviada', pregunta);
 
-      // Contar los segundos restantes (para que no dependa de ningún usuario)
-      let segundos = parseInt(pregunta.timer);
-      let k = setInterval(function() {
-          segundos--;
-          socket.broadcast.to(sala).emit('segundosRestantes', segundos)
-          if (segundos <= 0) {
+      // Enviar la pregunta solo si no hay otra en curso
+      if(mapaSegundos.get(sala) == null) {
+        mapaCorrectas.set(sala, pregunta.correcta)
+        socket.broadcast.to(sala).emit('preguntaEnviada', pregunta);
+
+        // Contar los segundos restantes (para que no dependa de ningún usuario)
+        mapaSegundos.set(sala, pregunta.timer)
+        let k = setInterval(function() {
+            mapaSegundos.set(sala, mapaSegundos.get(sala)-1)
+            socket.broadcast.to(sala).emit('segundosRestantes', mapaSegundos.get(sala))
+            if (mapaSegundos.get(sala) <= 0) {
+              mapaSegundos.set(sala, null)
               clearInterval(k);
-          }
-      }, 1000);
+            }
+        }, 1000);
 
-      console.log('Estoy en enviarPregunta:', pregunta);
-      console.log('Enviada pregunta a sala', sala)
+        console.log('Estoy en enviarPregunta:', pregunta);
+        console.log('Enviada pregunta a sala', sala)
+      } else {
+        socket.emit('errorPregunta', 0)
+        console.log('Ya hay una pregunta en curso en la sala', sala);
+      }
     });
 
     // Cuando un alumno responde
@@ -66,7 +75,7 @@ io.on('connection', socket => {
 
       if(mapaCorrectas.get(sala) == respuesta.resp) puntos++; 
       else puntos--;
-      console.log(respuesta.nombre, puntos)
+
       mapaPuntos.get(sala).set(respuesta.nombre, puntos)
       socket.broadcast.to(sala).emit('respuestaEnviada', {nombre: respuesta.nombre, puntos: puntos, resp: respuesta.resp});
       socket.emit('nuevosPuntos', puntos)
@@ -103,17 +112,20 @@ io.on('connection', socket => {
 
     // Cuando un profesor abre un cuestionario
     // Crear una nueva sala con el id del cuestionario y entrar en ella
-    socket.on('nuevaSesion', function(cuestionario) {
+    socket.on('nuevaSesion', function(sala) {
       // Salir de todas las salas anteriores (si las hay)
       var salasUsuario = io.sockets.adapter.sids[socket.id]; 
       for(var s in salasUsuario) { socket.leave(s); }
 
-      // Crear datos de la sala
-      mapaPuntos.set(cuestionario, new Map())
+      // Crear datos de la sala (si no existe)
+      if(mapaPuntos.get(sala) == null) {
+        mapaPuntos.set(sala, new Map())
+        mapaSegundos.set(sala, null)
+        console.log('Abierta sala', sala)
+      }
 
-      // Entrar en la nueva sala
-      socket.join(cuestionario)
-      console.log('Abierta sala', cuestionario)
+      // Entrar en la sala
+      socket.join(sala)
     })
 
     // Cuando un socket se desconecta

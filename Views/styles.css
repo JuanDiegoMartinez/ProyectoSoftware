@@ -31,10 +31,6 @@ button {
     margin: 10px;
 }
 
-h1 {
-    margin-top: 5%;
-}
-
 .centrado {
     align-self: center;
     align-items: center;
@@ -79,4 +75,34 @@ h1 {
     color: #ffffff;
     background-color: #3cb44b;
     border-color: #3cb44b;
+}
+
+.tituloBarra {
+    background-image: url(header.jpg);
+    padding-bottom: 1%;
+    padding-top: 1%;
+}
+
+.tituloPagina {
+    font-size: 4em;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    color: #2e7bb9;
+}
+
+.elegirSala {
+    color: #ffffff;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    padding: 1%;
+}
+
+.elegirCuest {
+    color: #ffffff;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    padding: 1%;
 }

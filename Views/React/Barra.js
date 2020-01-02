@@ -21,15 +21,20 @@ class Barra extends React.Component {
     render() {
         return(
             <React.Fragment>
-                <header>
+                <header className="tituloBarra">
+                    {/*
                     <nav>
                         Sesión iniciada como: {this.props.user} <br/>
                         <Link to="/ModificarDatos"> Ajustes </Link> <br/>
                         <Link to="/Login"> Cerrar sesión </Link>
                     </nav>
+                    
+                    <h1 className="tituloPagina">Kative</h1>
+                    */}
+                    <p align="center" className="tituloPagina">KaTive</p>
                 </header>
             </React.Fragment>
-        );
+        );  
     }
 }
 

@@ -27,7 +27,7 @@ class ElegirSala extends React.Component {
                 <form align="center" id="form" onSubmit={this.submitForm.bind(this)}>
                     <p align="center"> Código: <br/> 
                     <input id="Sala" type="text"/> </p>
-                    <button type="submit">Entrar</button>
+                    <button type="submit" align="center">Entrar</button>
                 </form>
 
                 <p align="center" id="info"></p>

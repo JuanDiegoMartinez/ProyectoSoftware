@@ -23,11 +23,17 @@ class AbrirCuestionario extends React.Component {
     componentWillMount() {
         var socket = io.connect('/');
         socket.emit('nuevaSesion', this.props.match.params.id);
-
+        
         this.setState({
             idCues: this.props.match.params.id,
             socketP: socket
         });
+
+        socket.on('errorPregunta', function(codError) {
+            if(codError == 0) {
+                document.getElementById('info').innerHTML = "Ya hay una pregunta en curso";
+            }
+        })
     }
 
     async componentDidMount() {
@@ -89,11 +95,7 @@ class AbrirCuestionario extends React.Component {
                         timer: seleccionada.tiempo
                     };
 
-        // Deshabilitar el botón de envío y habilitarlo tras terminar la pregunta (con 2 segundos de margen añadidos)
-        document.getElementById('enviarPreg').disabled = true;
-        setInterval(function() {
-            document.getElementById('enviarPreg').disabled = false;
-        }, (seleccionada.tiempo + 2) * 1000);
+        document.getElementById('info').innerHTML = "";
 
         this.state.socketP.emit('enviarPregunta', pregunta);
     }
@@ -108,6 +110,7 @@ class AbrirCuestionario extends React.Component {
                     </table>
                     <br></br>
                     <button id="enviarPreg" type="submit" onClick={this.enviarPregunta}> Enviar Pregunta </button>
+                    <p align="center" id="info"></p>
                 </form>
                 <br></br>
                 <p align="center"> <Link to={`/Proyector/${this.state.idCues}`} target="_blank"> Abrir proyector </Link> </p>
