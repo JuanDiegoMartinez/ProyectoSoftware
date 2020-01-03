@@ -27,15 +27,19 @@ class ModificarDatos extends React.Component {
   
     handleSubmit = async e => {
         e.preventDefault();
-        const body = await CModificarDatos.handleModifications();
+        if(document.getElementById('Password1').value == document.getElementById('Password2').value) {
+            await CModificarDatos.handleModifications();
+            document.getElementById('Info').innerHTML = "Cambios realizados satisfactoriamente"
+        } else {
+            document.getElementById('Info').innerHTML = "Las contraseñas deben coincidir"
+        }
     };
 
     render() {
         return(
             <React.Fragment>
-  
                 <h1 align="center"> Modificar Datos </h1>
-                <p> Conectado como: {this.state.user} </p>
+                <p align="center"> Conectado como: {this.state.user} </p>
                 
                 <form align="center" onSubmit={this.handleSubmit}>
                     <p> Nueva Contraseña: <input id="Password1" type="password" /> </p>
@@ -43,7 +47,9 @@ class ModificarDatos extends React.Component {
                     <p> Email: <input id="Email" type="email" defaultValue={this.state.email}/> </p>   
                     <p> <button type="submit"> Guardar cambios </button> </p>
                 </form>
+                <p align="center" id="Info"></p>
 
+                <p align="center"> <Link to="/Principal"> Volver al panel principal </Link> </p>
             </React.Fragment>
         );
     }

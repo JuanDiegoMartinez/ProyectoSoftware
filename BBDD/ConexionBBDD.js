@@ -7,16 +7,18 @@ let db = new sqlite3.Database(path.join(__dirname, 'database.db'), sqlite3.OPEN_
     if (err) {
       console.error(err.message);
     }
-    console.log('Connected to the database.');
+    console.log('Conectado a la base de datos.');
 });
 
 DB({
-  path: path.join(__dirname, 'database.db'), // this is the default
-  memory: false, // create a db only in memory
-  readonly: false, // read only
-  fileMustExist: false, // throw error if database not exists
+  path: path.join(__dirname, 'database.db'),
+  memory: false,
+  readonly: false,
+  fileMustExist: false,
   migrate: false
 })
 
+// Al utilizar exports y después cargar con require, solamente una instancia de cada
+// objeto será utilizada por las clases que realizan las queries (singleton).
 exports.db = db;
 exports.DB = DB;

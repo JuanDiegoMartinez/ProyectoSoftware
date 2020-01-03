@@ -144,7 +144,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //BBDD de la parte de los usuarios
-const usuarios = require('./BBDD/QuerysUsuarios');
+const usuarios = require('./BBDD/QueriesUsuarios');
 
 // Login usuario (req = user, pass)
 app.post('/login/usuario', function(req, res) {
@@ -152,7 +152,7 @@ app.post('/login/usuario', function(req, res) {
   console.log('Estoy en /login/usuario: ', req.body);
   var login = usuarios.loginUsuario([req.body.user, req.body.pass]);
 
-  if (login == true) {
+  if (login) {
     req.session.user = req.body.user;
     console.log('Estoy en /login/usuario: ', req.session);
     console.log('Estoy en /login/usuario: ', req.session.user);
@@ -164,8 +164,8 @@ app.post('/login/usuario', function(req, res) {
 app.post('/registro/usuario', (req, res) => {
 
   console.log('Estoy en /registro/usuario: ', req.body)
-  usuarios.insertarUsuario([req.body.user, req.body.pass, req.body.email]);
-  res.send('Usuario registrado');
+  var insertado = usuarios.insertarUsuario([req.body.user, req.body.pass, req.body.email]);
+  res.send(insertado);
 });
 
 // Modificar datos usuario (req = pass, email)
@@ -197,7 +197,7 @@ app.get('/datos/usuario', (req, res) => {
 });
 
 //BBDD de la parte de los cuestionarios
-const cuestionarios = require('./BBDD/QuerysCuestionarios');
+const cuestionarios = require('./BBDD/QueriesCuestionarios');
 
 // Insertar cuestionario (req = user, id_cues, nombre, asig)
 app.post('/insertar/cuestionario', (req, res) => {
@@ -232,7 +232,7 @@ app.post('/modificar/cuestionario', (req, res) => {
 });
 
 //BBDD de la parte de las preguntas
-const preguntas = require('./BBDD/QuerysPreguntas');
+const preguntas = require('./BBDD/QueriesPreguntas');
 
 // Insertar pregunta (req = id_cues, id_pre, pre, resp, correcta, tiempo)
 app.post('/insertar/pregunta', (req, res) => {
@@ -274,7 +274,6 @@ app.post('/ultima/pregunta', (req, res) => {
 // Esto debe ir al final. Recoge los GET que no sabe redireccionar 
 // y se los pasa a react para que los enrute adecuadamente.
 app.get('/*', function(req, res) {
-  //console.log('Recibido GET desconocido. Delegando enrutamiento a React.')
   res.sendFile(path.join(__dirname, 'Views/index.html'), function(err) {
     if (err) {
       res.status(500).send(err)

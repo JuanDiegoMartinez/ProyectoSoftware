@@ -14,7 +14,12 @@ class Register extends React.Component {
     handleSubmit = async e => {
         e.preventDefault();
         const body = await handleRegister();
-        this.setState({ response: body });
+
+        if(body == 'true') {
+            this.setState({ response: "Usuario registrado" });
+        } else {
+            this.setState({ response: "Este usuario ya existe" });
+        }
         document.getElementById('form').reset();
     };
 
@@ -27,15 +32,13 @@ class Register extends React.Component {
                 <form align="center" id="form" onSubmit={this.handleSubmit}>
                     <p> Usuario: <br/><input id="Usuario" type="text" required /> </p> 
                     <p> Contraseña: <br/><input id="Password" type="password" required /> </p> 
-                    <p> Email: <br/><input id="Email" type="email" required /> </p> 
-                    <input type="radio" name="Tipousuario" value="profesor" /> Profesor &nbsp;
-                    <input type="radio" name="Tipousuario" value="alumno" defaultChecked /> Alumno <br/>
+                    <p> Email: <br/><input id="Email" type="email" required /> </p>
                     <p> <button type="submit"> Enviar </button> </p>
                 </form>
 
                 <p align="center">{this.state.response}</p>
 
-                <p align="center"> <Link to="/Login"> ¿Ya tienes una cuenta? </Link> </p>
+                <p align="center"> <Link to="/Login"> Iniciar sesión </Link> </p>
 
             </React.Fragment>
         );
