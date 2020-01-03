@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Barra from '../Barra';
 
 class Principal extends React.Component {
 
