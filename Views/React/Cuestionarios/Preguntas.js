@@ -86,6 +86,12 @@ class Preguntas extends React.Component {
     //Crear una nueva pregunta
     nuevaPregunta = async e => {
         e.preventDefault();
+        document.getElementById('nuevaPreg').disabled = true;
+        document.getElementById('modifPreg').disabled = true;
+        document.getElementById('elimPreg').disabled = true;
+        for (var i = 0; i < this.state.listaPre.length; i++) {
+            document.getElementById(`Elegido${i}`).disabled = true;
+        }
 
         var nuevafila = ` 
         <tr> <td> Pregunta: <input class= "textolargo" id="Pregunta" type="text" /> </td> </tr>
@@ -106,7 +112,6 @@ class Preguntas extends React.Component {
     //Insertar la pregunta en la base de datos
     insertar = async e => {
         e.preventDefault();
-
         var ultPregunta = this.state.ultPre + 1;
 
         var a = await CPreguntas.handleInsert(this.state.idCues, ultPregunta);
@@ -115,33 +120,59 @@ class Preguntas extends React.Component {
             ultPre: ultPregunta
         })
 
+        document.getElementById('nuevaPreg').disabled = false;
+        document.getElementById('modifPreg').disabled = false;
+        document.getElementById('elimPreg').disabled = false;
+        for (var i = 0; i < this.state.listaPre.length; i++) {
+            document.getElementById(`Elegido${i}`).disabled = false;
+        }
         this.componentDidMount();   
     }
 
     //Modificar datos de la pregunta
     modificarPregunta = async e => {
         e.preventDefault();
-
         var pos = this.state.radioPul;
 
-        var fila = `<tr> <th> Pregunta: <input className= "textolargo" id="Pregunta" type="text" value=${this.state.listaPre[pos].pregunta} /> </th> </tr>
-                        <tr> <td> <p> Respuesta 1: <input className= "textolargo" id="Respuesta1" value=${this.state.listaPre[pos].respuesta1} />
-                        Respuesta 2: <input id="Respuesta2" className= "textolargo" value=${this.state.listaPre[pos].respuesta2} /> </p>
-                        <p> Respuesta 3: <input id="Respuesta3" className= "textolargo" value=${this.state.listaPre[pos].respuesta3} /> 
-                        Respuesta 4: <input id="Respuesta4" className= "textolargo" value=${this.state.listaPre[pos].respuesta4} /> </p> </td> </tr>
-                        <tr> <td align="center"> Correcta: <input id="Correcta" type="number" min="1" max="4" value=${this.state.listaPre[pos].correcta} /> </td> </tr>
-                        <tr> <td align="center"> Tiempo: <input id="Tiempo" type="number" min="1" value=${this.state.listaPre[pos].tiempo} /> </td> </tr>
-                        <tr> <td align="center"> <input type="radio" id="Elegido${pos}" name="unico" value=${pos} /> </td> </tr>`
+        if(pos != -1) {
+            document.getElementById('nuevaPreg').disabled = true;
+            document.getElementById('modifPreg').disabled = true;
+            document.getElementById('elimPreg').disabled = true;
+            for (var i = 0; i < this.state.listaPre.length; i++) {
+                document.getElementById(`Elegido${i}`).disabled = true;
+            }
 
-        document.getElementById("Fila" + pos).innerHTML = fila;
+            // Fila a editar
+            var fila = `<tr> <th> Pregunta: <input className= "textolargo" id="Pregunta" type="text" value=${this.state.listaPre[pos].pregunta} /> </th> </tr>
+                            <tr> <td> <p> Respuesta 1: <input className= "textolargo" id="Respuesta1" value=${this.state.listaPre[pos].respuesta1} />
+                            Respuesta 2: <input id="Respuesta2" className= "textolargo" value=${this.state.listaPre[pos].respuesta2} /> </p>
+                            <p> Respuesta 3: <input id="Respuesta3" className= "textolargo" value=${this.state.listaPre[pos].respuesta3} /> 
+                            Respuesta 4: <input id="Respuesta4" className= "textolargo" value=${this.state.listaPre[pos].respuesta4} /> </p> </td> </tr>
+                            <tr> <td align="center"> Correcta: <input id="Correcta" type="number" min="1" max="4" value=${this.state.listaPre[pos].correcta} /> </td> </tr>
+                            <tr> <td align="center"> Tiempo: <input id="Tiempo" type="number" min="1" value=${this.state.listaPre[pos].tiempo} /> </td> </tr>
+                            <tr> <td align="center"> <input type="radio" id="Elegido${pos}" name="unico" value=${pos} disabled /> </td> </tr>`
+            document.getElementById("Fila" + pos).innerHTML = fila;
 
-        var boton = document.getElementById('Mod');
-        boton.style.display = "inline";
+
+
+            var boton = document.getElementById('Mod');
+            boton.style.display = "inline";
+        }
     }
 
     //Modificar la pregunta en la bbdd
     modificar = async e => {
         e.preventDefault();
+
+        // Desbloquear los botones de crear/modificar/borrar pregunta
+        document.getElementById('nuevaPreg').disabled = false;
+        document.getElementById('modifPreg').disabled = false;
+        document.getElementById('elimPreg').disabled = false;
+
+        // Desbloquear los botones "seleccionado" de la tabla
+        for (var i = 0; i < this.state.listaPre.length; i++) {
+            document.getElementById(`Elegido${i}`).disabled = false;
+        }
 
         var a = await CPreguntas.handleModifications(this.state.idCues, this.state.idPre);
 
@@ -170,9 +201,10 @@ class Preguntas extends React.Component {
                     <h1> Preguntas del cuestionario: </h1>
                     <form id="form">
                     <table id="tabla"> </table>
-                    <button type="submit" onClick={this.nuevaPregunta}> Añadir Nueva Pregunta </button>
-                    <button type="submit" onClick={this.modificarPregunta}> Modificar Pregunta </button>
-                    <button type="submit" onClick={this.borrarPregunta}> Eliminar Pregunta </button>
+
+                    <button type="submit" id="nuevaPreg" onClick={this.nuevaPregunta}> Añadir Nueva Pregunta </button>
+                    <button type="submit" id="modifPreg" onClick={this.modificarPregunta}> Modificar Pregunta </button>
+                    <button type="submit" id="elimPreg" onClick={this.borrarPregunta}> Eliminar Pregunta </button>
                     <p><button type="submit" id="Insert" onClick={this.insertar}> Aceptar Cambios </button></p>
                     <p><button type="submit" id="Mod" onClick={this.modificar}> Aceptar Cambios </button></p>
                     </form>

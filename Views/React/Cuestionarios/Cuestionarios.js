@@ -86,6 +86,9 @@ class Cuestionarios extends React.Component {
         document.getElementById('nuevoCuest').disabled = true;
         document.getElementById('modifCuest').disabled = true;
         document.getElementById('elimCuest').disabled = true;
+        for (var i = 0; i < this.state.listaCues.length; i++) {
+            document.getElementById(`Elegido${i}`).disabled = true;
+        }
 
         var nuevafila = `<tr>
         <td><input id="Nombre" type="text" /></td> 
@@ -108,6 +111,9 @@ class Cuestionarios extends React.Component {
         document.getElementById('nuevoCuest').disabled = false;
         document.getElementById('modifCuest').disabled = false;
         document.getElementById('elimCuest').disabled = false;
+        for (var i = 0; i < this.state.listaCues.length; i++) {
+            document.getElementById(`Elegido${i}`).disabled = false;
+        }
 
         var a = await CCuestionarios.handleInsert();
 
