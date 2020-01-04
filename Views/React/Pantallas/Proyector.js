@@ -22,7 +22,6 @@ class Proyector extends React.Component {
         var nResp = [0, 0, 0, 0] // Resultados de la pregunta actual
         var mapaPuntos = new Map()
 
-
         // Integer como nombre para diferenciarse de los alumnos
         socket.emit('nuevoUsuario', {nombre: this.props.match.params.id, 
             sala: this.props.match.params.id});
@@ -104,12 +103,22 @@ class Proyector extends React.Component {
                 punt.style.display = "block";
             }
         })
+
+        // Al saber que se ha terminado la sesión actual, mostrar la puntuación final
+        socket.on('sesionTerminada', function(codigo) {
+            document.getElementById('puntos').innerHTML = "Puntuación final:"
+            document.getElementById('espera').style.display = "none";
+            document.getElementById('timer').style.display = "none";
+            document.getElementById('pregunta').style.display = "none";
+            document.getElementById('alumnos').style.display = "block";
+        })
     }
    
     render() {
         return(
             <React.Fragment>
-            <br/><br/>
+            <br/>
+            <h3 align="center">Sala {this.props.match.params.id} </h3>
             <p align="center" id="bienvenida">
                 Bienvenido al proyector<br/>
                 Envía una pregunta del cuestionario para comenzar<br/>

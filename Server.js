@@ -33,6 +33,7 @@ app.use(session({
 var mapaPuntos = new Map(); 
 var mapaCorrectas = new Map();
 var mapaSegundos = new Map();
+var mapaRespondidas = new Map();
 
 // Conexiones de los sockets
 io.on('connection', socket => {
@@ -47,6 +48,9 @@ io.on('connection', socket => {
       if(mapaSegundos.get(sala) == null) {
         mapaCorrectas.set(sala, pregunta.correcta)
         socket.broadcast.to(sala).emit('preguntaEnviada', pregunta);
+
+        mapaRespondidas.get(sala).push(pregunta.id)
+        socket.emit('pregEnviadas', mapaRespondidas.get(sala))
 
         // Contar los segundos restantes (para que no dependa de ningún usuario)
         mapaSegundos.set(sala, pregunta.timer)
@@ -117,15 +121,32 @@ io.on('connection', socket => {
       var salasUsuario = io.sockets.adapter.sids[socket.id]; 
       for(var s in salasUsuario) { socket.leave(s); }
 
-      // Crear datos de la sala (si no existe)
+      // Crear datos de la sala si no existe
       if(mapaPuntos.get(sala) == null) {
         mapaPuntos.set(sala, new Map())
         mapaSegundos.set(sala, null)
+        mapaRespondidas.set(sala, Array())
         console.log('Abierta sala', sala)
+
+      // Enviar datos de la sala si ya existe (el profesor ha actualizado la página)
+      } else {
+        socket.emit('pregEnviadas', mapaRespondidas.get(sala))
       }
 
       // Entrar en la sala
       socket.join(sala)
+    })
+
+    // Cuando termina una sesión
+    // Eliminar todos los datos de la sesión (si no hay una pregunta en curso) y notificar a la sala
+    socket.on('terminarSesion', function(sala) {
+      if(mapaSegundos.get(sala) == null) {
+        socket.broadcast.to(sala).emit('sesionTerminada', 0)
+        mapaPuntos.delete(sala)
+        mapaCorrectas.delete(sala)
+        mapaSegundos.delete(sala)
+        mapaRespondidas.delete(sala)
+      }
     })
 
     // Cuando un socket se desconecta

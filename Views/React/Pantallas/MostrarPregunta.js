@@ -65,7 +65,15 @@ class MostrarPregunta extends React.Component {
             } else { 
                 tim.innerHTML = `Quedan ${segundos} segundos`;
             }
-            
+        })
+
+        // Al saber que se ha terminado la sesión actual, mostrar la puntuación final
+        socket.on('sesionTerminada', function(codigo) {
+            document.getElementById('espera').style.display = "none";
+            document.getElementById('timer').innerHTML = "Cuestionario terminado";
+            document.getElementById('timer').style.display = "block";
+            document.getElementById('pregunta').style.display = "none";
+            document.getElementById('puntos').style.display = "block";
         })
 
         // Al recibir los nuevos puntos, actualizar la vista

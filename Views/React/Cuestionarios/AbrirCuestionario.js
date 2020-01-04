@@ -22,18 +22,32 @@ class AbrirCuestionario extends React.Component {
 
     componentWillMount() {
         var socket = io.connect('/');
-        socket.emit('nuevaSesion', this.props.match.params.id);
-        
         this.setState({
             idCues: this.props.match.params.id,
             socketP: socket
         });
 
-        socket.on('errorPregunta', function(codError) {
+        socket.on('errorPregunta', (codError) => {
             if(codError == 0) {
                 document.getElementById('info').innerHTML = "Ya hay una pregunta en curso";
             }
         })
+
+        socket.on('pregEnviadas', this.actualizarRespondidas)
+
+        socket.emit('nuevaSesion', this.props.match.params.id);
+    }
+
+    actualizarRespondidas = (respondidas) => {
+        console.log("Respondidas:", respondidas)
+        for (var i = this.state.listaPre.length - 1; i >= 0; i--) {
+            if (respondidas.includes(this.state.listaPre[i].id_pre)) { 
+                console.log('Eliminada pregunta', i, 'con id', this.state.listaPre[i].id_pre)
+                this.state.listaPre.splice(i, 1);
+            }
+        }
+        this.montarTabla();
+        this.crearListeners();
     }
 
     async componentDidMount() {
@@ -55,17 +69,19 @@ class AbrirCuestionario extends React.Component {
         var table = `<tr> <th> Id cuestionario: ${this.state.idCues} </th> </tr>`;
         for (var i = 0; i < this.state.listaPre.length; i++) {
             table += `<tbody id="Fila${i}">
-            <tr> <th> Pregunta: ${this.state.listaPre[i].pregunta} </th> 
+                        <tr> <th> Pregunta: ${this.state.listaPre[i].pregunta} </th> 
                         <td align="center"> <input type="radio" id="Elegido${i}" name="unico" value=${i} /> </td> </tr>
                         </tbody>`;
         }
         document.getElementById("tabla").innerHTML = table;
+        document.getElementById('atras').style.display = "none";
     }
 
     //Crear listeners de los radiobuttons
     crearListeners() {
         for (var i = 0; i < this.state.listaPre.length; i++) {
-            document.getElementById("Elegido" + i).addEventListener("change", this.saberPregunta);
+            if(document.getElementById("Elegido" + i) !== null)
+                document.getElementById("Elegido" + i).addEventListener("change", this.saberPregunta);
         }
     }
 
@@ -86,18 +102,32 @@ class AbrirCuestionario extends React.Component {
 
         var pos = this.state.radioPul;
         var seleccionada = this.state.listaPre[pos];
-        var pregunta = {preg: seleccionada.pregunta, 
+        var pregunta = {id: seleccionada.id_pre,
+                        preg: seleccionada.pregunta, 
                         res1: seleccionada.respuesta1, 
                         res2: seleccionada.respuesta2, 
                         res3: seleccionada.respuesta3, 
                         res4: seleccionada.respuesta4, 
                         correcta: seleccionada.correcta,
                         timer: seleccionada.tiempo
-                    };
-
+        };
+        
         document.getElementById('info').innerHTML = "";
 
         this.state.socketP.emit('enviarPregunta', pregunta);
+    }
+
+    terminarSesion = e => {
+        e.preventDefault()
+        this.state.socketP.emit('terminarSesion', this.state.idCues)
+        document.getElementById('enviarPreg').style.display = "none";
+        document.getElementById('termSesion').style.display = "none";
+        document.getElementById('proyector').style.display = "none";
+        document.getElementById('atras').style.display = "inline";
+    }
+
+    atras = e => {
+        this.props.history.push(`/Cuestionarios`)
     }
 
     render() {
@@ -110,10 +140,12 @@ class AbrirCuestionario extends React.Component {
                     </table>
                     <br></br>
                     <button id="enviarPreg" type="submit" onClick={this.enviarPregunta}> Enviar Pregunta </button>
+                    <button id="termSesion" type="submit" onClick={this.terminarSesion}> Terminar sesión </button>
+                    <button id="atras" type="submit" onClick={this.atras}> Volver atrás </button>
                     <p align="center" id="info"></p>
                 </form>
                 <br></br>
-                <p align="center"> <Link to={`/Proyector/${this.state.idCues}`} target="_blank"> Abrir proyector </Link> </p>
+                <p id="proyector" align="center"> <Link to={`/Proyector/${this.state.idCues}`} target="_blank"> Abrir proyector </Link> </p>
                 
                 <NewWindow outerWidth="650" title="Proyector" copyStyles="true" url={`/Proyector/${this.state.idCues}`} />
 
