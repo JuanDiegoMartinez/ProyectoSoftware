@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 import Usuario from '../../../Controllers/ControllerModificarDatos';
 import espera from './Todo';
@@ -42,7 +41,9 @@ class MostrarPregunta extends React.Component {
         });
 
         this.state.user.on('errorSala', function(valor) {
-            // Gestionar errores de la sala si fuese necesario
+            document.getElementById('espera').style.display = "none";
+            document.getElementById('timer').style.display = "block";
+            document.getElementById('timer').innerHTML = "Esta sala no existe"
         })
 
         socket.emit('nuevoUsuario', {nombre: usuario.nombre, sala: this.props.match.params.id});

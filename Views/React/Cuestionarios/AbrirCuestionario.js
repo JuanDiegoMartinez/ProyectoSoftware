@@ -36,10 +36,13 @@ class AbrirCuestionario extends React.Component {
         socket.on('errorPregunta', (codError) => {
             if(codError == 0) {
                 document.getElementById('info').innerHTML = "Ya hay una pregunta en curso";
+            } else if(codError == 1) {
+                document.getElementById('info').innerHTML = "No puedes terminar la sesión ahora, hay una pregunta en curso";
             }
         })
 
         socket.on('pregEnviadas', this.actualizarRespondidas)
+        socket.on('sesionTerminada', this.actualizarSesion)
 
         socket.emit('nuevaSesion', this.props.match.params.id);
     }
@@ -49,6 +52,13 @@ class AbrirCuestionario extends React.Component {
         this.setState({
             nombre: usuario.nombre
         });
+    }
+
+    actualizarSesion = (codigo) => {
+        document.getElementById('enviarPreg').style.display = "none";
+        document.getElementById('termSesion').style.display = "none";
+        document.getElementById('proyector').style.display = "none";
+        document.getElementById('atras').style.display = "inline";
     }
 
     actualizarRespondidas = (respondidas) => {
@@ -131,10 +141,6 @@ class AbrirCuestionario extends React.Component {
     terminarSesion = e => {
         e.preventDefault()
         this.state.socketP.emit('terminarSesion', this.state.idCues)
-        document.getElementById('enviarPreg').style.display = "none";
-        document.getElementById('termSesion').style.display = "none";
-        document.getElementById('proyector').style.display = "none";
-        document.getElementById('atras').style.display = "inline";
     }
 
     atras = e => {

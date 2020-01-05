@@ -114,6 +114,18 @@ io.on('connection', socket => {
       }
     });
 
+    // Cuando un alumno intenta entrar a una sala
+    // Responder según si existe o no dicha sala
+    socket.on('comprobarSala', function(sala) {
+      if(mapaPuntos.has(sala)) {
+        console.log("La sala", sala, "existe")
+        socket.emit('salaExiste', 1)
+      } else {
+        console.log("La sala", sala, "no existe")
+        socket.emit('salaExiste', 0)
+      }
+    })
+
     // Cuando un profesor abre un cuestionario
     // Crear una nueva sala con el id del cuestionario y entrar en ella
     socket.on('nuevaSesion', function(sala) {
@@ -142,10 +154,13 @@ io.on('connection', socket => {
     socket.on('terminarSesion', function(sala) {
       if(mapaSegundos.get(sala) == null) {
         socket.broadcast.to(sala).emit('sesionTerminada', 0)
+        socket.emit('sesionTerminada', 0)
         mapaPuntos.delete(sala)
         mapaCorrectas.delete(sala)
         mapaSegundos.delete(sala)
         mapaRespondidas.delete(sala)
+      } else {
+        socket.emit('errorPregunta', 1)
       }
     })
 

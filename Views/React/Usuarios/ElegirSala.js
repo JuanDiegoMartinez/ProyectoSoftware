@@ -1,8 +1,7 @@
 import React from 'react';
-import socket from 'socket.io-client';
-import { Link } from 'react-router-dom';
 import Barra from '../Barra';
 import Usuario from '../../../Controllers/ControllerModificarDatos';
+import io from 'socket.io-client';
 
 
 class ElegirSala extends React.Component {
@@ -10,7 +9,8 @@ class ElegirSala extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: ''
+            user: '',
+            sala: -1
         };
     }
 
@@ -25,11 +25,30 @@ class ElegirSala extends React.Component {
         });
     }
 
+    componentDidMount() {
+        var socket = io.connect('/');
+        socket.on('salaExiste', this.actualizarSala)
+
+        this.setState({user: socket});
+    }
+
+    actualizarSala = (codigo) => {
+        if(codigo == 1) {
+            this.props.history.push(`/MostrarPregunta/${this.state.sala}`);
+        } else {
+            document.getElementById('info').innerHTML = 'Esta sala no existe';
+        }
+    }
+
     submitForm (e) {
         e.preventDefault();
-        //document.getElementById('info').innerHTML = 'La sala no existe';
-        var sala = document.getElementById('Sala').value
-        this.props.history.push(`/MostrarPregunta/${sala}`);
+        var s = document.getElementById('Sala').value;
+        if(s != '') {
+            this.setState({
+                sala: s
+            })
+            this.state.user.emit('comprobarSala', s)
+        }
     };
 
     render() {
