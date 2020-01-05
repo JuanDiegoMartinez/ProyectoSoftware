@@ -4,6 +4,8 @@ import io from 'socket.io-client';
 import CPreguntas from '../../../Controllers/ControllerPreguntas';
 import NewWindow from 'react-new-window';
 import Proyector from '../Pantallas/Proyector';
+import Barra from '../Barra';
+import Usuario from '../../../Controllers/ControllerModificarDatos';
 
 class AbrirCuestionario extends React.Component {
 
@@ -16,16 +18,20 @@ class AbrirCuestionario extends React.Component {
             listaPre: Array(),
             idPre: -1,
             radioPul: -1,
-            enviar: true
+            enviar: true,
+            nombre: ''
         };
     }
 
     componentWillMount() {
         var socket = io.connect('/');
+        
         this.setState({
             idCues: this.props.match.params.id,
             socketP: socket
         });
+
+        this.actualizarNombre()
 
         socket.on('errorPregunta', (codError) => {
             if(codError == 0) {
@@ -38,11 +44,16 @@ class AbrirCuestionario extends React.Component {
         socket.emit('nuevaSesion', this.props.match.params.id);
     }
 
+    actualizarNombre = async () => {
+        var usuario = await Usuario.handleData();
+        this.setState({
+            nombre: usuario.nombre
+        });
+    }
+
     actualizarRespondidas = (respondidas) => {
-        console.log("Respondidas:", respondidas)
         for (var i = this.state.listaPre.length - 1; i >= 0; i--) {
             if (respondidas.includes(this.state.listaPre[i].id_pre)) { 
-                console.log('Eliminada pregunta', i, 'con id', this.state.listaPre[i].id_pre)
                 this.state.listaPre.splice(i, 1);
             }
         }
@@ -133,6 +144,7 @@ class AbrirCuestionario extends React.Component {
     render() {
         return(
             <React.Fragment>
+                <Barra user={this.state.nombre}/><br/>
                 <h1 id="titulo" align="center"> Realizar Cuestionario</h1>
 
                 <form align="center" id="form">
@@ -147,7 +159,7 @@ class AbrirCuestionario extends React.Component {
                 <br></br>
                 <p id="proyector" align="center"> <Link to={`/Proyector/${this.state.idCues}`} target="_blank"> Abrir proyector </Link> </p>
                 
-                <NewWindow outerWidth="650" title="Proyector" copyStyles="true" url={`/Proyector/${this.state.idCues}`} />
+                <NewWindow title="Proyector" copyStyles="true" url={`/Proyector/${this.state.idCues}`} />
 
             </React.Fragment>
         );

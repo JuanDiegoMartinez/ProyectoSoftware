@@ -32,6 +32,7 @@ class Login extends React.Component {
     render() {
         return(
             <React.Fragment>
+                <Barra user=""/><br/>
                 <h1 align="center"> Iniciar Sesión </h1>
 
                 <form align="center" id="form" onSubmit={this.handleSubmit}>

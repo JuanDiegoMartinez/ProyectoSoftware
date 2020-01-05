@@ -1,37 +1,29 @@
 import React from 'react';
-import { Link, BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 class Barra extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            user: ''
-        };
     }
-  
-    handleSubmit = async (usu) => {
-        e.preventDefault();
-        //const body = await handleLogin();
-        this.setState({ postUser: usu });
-        //console.log('Se ha ejecutado el ref');
-    };
 
     render() {
         return(
             <React.Fragment>
                 <header className="tituloBarra">
-                    {/*
-                    <nav>
-                        Sesión iniciada como: {this.props.user} <br/>
-                        <Link to="/ModificarDatos"> Ajustes </Link> <br/>
-                        <Link to="/Login"> Cerrar sesión </Link>
-                    </nav>
-                    
-                    <h1 className="tituloPagina">Kative</h1>
-                    */}
                     <p align="center" className="tituloPagina">KaTive</p>
+                    {(() => {
+                        if (this.props.user != "") {
+                            return  <nav>
+                                        <p style={{display:"inline"}} className="menuPagina">Sesión iniciada como: {this.props.user}</p>
+                                        <Link className="menuPagina" to="/Principal"> Panel principal </Link>
+                                        <Link className="menuPagina" to="/Login"> Cambiar de usuario </Link>
+                                    </nav>;
+                        } else {
+                            return;
+                        }
+                    })()}
+                    
                 </header>
             </React.Fragment>
         );  

@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 import Controlador from '../../../Controllers/ControllerProyector';
 import espera from './Todo';
+import Barra from '../Barra';
 
 
 class Proyector extends React.Component {
@@ -117,6 +118,7 @@ class Proyector extends React.Component {
     render() {
         return(
             <React.Fragment>
+            <Barra user=""/><br/>
             <br/>
             <h3 align="center">Sala {this.props.match.params.id} </h3>
             <p align="center" id="bienvenida">
@@ -137,10 +139,10 @@ class Proyector extends React.Component {
             <table align="center">
                 <tbody>
                 <tr>
-                    <th>A</th>
-                    <th>B</th>
-                    <th>C</th>
-                    <th>D</th>
+                    <th className="text-center">A</th>
+                    <th className="text-center">B</th>
+                    <th className="text-center">C</th>
+                    <th className="text-center">D</th>
                 </tr>
                 <tr>
                     <td align="center" id="respuestas1">0</td>  

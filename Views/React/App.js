@@ -16,7 +16,6 @@ import AbrirCuestionario from './Cuestionarios/AbrirCuestionario';
 //Pantallas
 import Proyector from './Pantallas/Proyector';
 import MostrarPregunta from './Pantallas/MostrarPregunta';
-import Barra from './Barra';
 
 class App extends React.Component {
 
@@ -24,8 +23,6 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <div>
-          <Barra/>
-          <br/><br/>
           <Switch>
             <Route exact path="/" component={Login} />
             <Route exact path="/Login" component={Login} />

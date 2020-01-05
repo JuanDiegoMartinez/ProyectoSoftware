@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import CCuestionarios from '../../../Controllers/ControllerCuestionarios';
+import Barra from '../Barra';
+import Usuario from '../../../Controllers/ControllerModificarDatos';
 
 class Cuestionarios extends React.Component {
 
@@ -12,12 +14,23 @@ class Cuestionarios extends React.Component {
             listaCues: Array(),
             seleccionado: -1,
             radioPul: -1,
-            links: 0
+            links: 0,
+            nombre: ''
         }
+    }
+
+    componentWillMount() {
+        this.actualizarNombre()
+    }
+
+    actualizarNombre = async () => {
+        var usuario = await Usuario.handleData();
+        this.setState({
+            nombre: usuario.nombre
+        });
     }
     
     async componentDidMount() {
-
         //Obtener los cuestionarios del usuario
         var cuestionarios = await CCuestionarios.handleData();
 
@@ -188,6 +201,7 @@ class Cuestionarios extends React.Component {
     render() {
         return(
             <React.Fragment>
+                <Barra user={this.state.nombre}/><br/>
                 <div align="center">
                     <h1> Lista de cuestionarios</h1>
                     <form id="form">

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import CPreguntas from '../../../Controllers/ControllerPreguntas';
+import Barra from '../Barra';
+import Usuario from '../../../Controllers/ControllerModificarDatos';
 
 class Preguntas extends React.Component {
 
@@ -14,6 +16,17 @@ class Preguntas extends React.Component {
             idPre: -1,
             ultPre: -1           
         }
+    }
+    
+    componentWillMount() {
+        this.actualizarNombre()
+    }
+
+    actualizarNombre = async () => {
+        var usuario = await Usuario.handleData();
+        this.setState({
+            nombre: usuario.nombre
+        });
     }
     
     async componentDidMount() {
@@ -196,7 +209,7 @@ class Preguntas extends React.Component {
     render() {
         return(
             <React.Fragment>
-                
+                <Barra user={this.state.nombre}/><br/>
                 <div align="center">
                     <h1> Preguntas del cuestionario: </h1>
                     <form id="form">

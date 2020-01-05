@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import io from 'socket.io-client';
 import Usuario from '../../../Controllers/ControllerModificarDatos';
 import espera from './Todo';
+import Barra from '../Barra';
 
 class MostrarPregunta extends React.Component {
 
@@ -14,6 +15,17 @@ class MostrarPregunta extends React.Component {
             user: '',
             contador: -1
         };
+    }
+
+    componentWillMount() {
+        this.actualizarNombre()
+    }
+
+    actualizarNombre = async () => {
+        var usuario = await Usuario.handleData();
+        this.setState({
+            nombre: usuario.nombre
+        });
     }
 
     async componentDidMount() {
@@ -101,6 +113,7 @@ class MostrarPregunta extends React.Component {
     render() {
         return(
             <React.Fragment>
+            <Barra user={this.state.nombre}/><br/>
             <br/>
             <div id="espera">
                 {espera.esperaEnvioPregunta()}

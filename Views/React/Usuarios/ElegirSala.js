@@ -1,6 +1,8 @@
 import React from 'react';
 import socket from 'socket.io-client';
 import { Link } from 'react-router-dom';
+import Barra from '../Barra';
+import Usuario from '../../../Controllers/ControllerModificarDatos';
 
 
 class ElegirSala extends React.Component {
@@ -10,6 +12,17 @@ class ElegirSala extends React.Component {
         this.state = {
             user: ''
         };
+    }
+
+    componentWillMount() {
+        this.actualizarNombre()
+    }
+
+    actualizarNombre = async () => {
+        var usuario = await Usuario.handleData();
+        this.setState({
+            nombre: usuario.nombre
+        });
     }
 
     submitForm (e) {
@@ -22,6 +35,7 @@ class ElegirSala extends React.Component {
     render() {
         return(
             <React.Fragment>
+                <Barra user={this.state.nombre}/><br/>
                 <h1 align="center"> Elige la sala </h1> <br/> <br/> 
 
                 <form align="center" id="form" onSubmit={this.submitForm.bind(this)}>

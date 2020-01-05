@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import CModificarDatos from '../../../Controllers/ControllerModificarDatos';
+import Barra from '../Barra';
+import Usuario from '../../../Controllers/ControllerModificarDatos';
 
 class ModificarDatos extends React.Component {
 
@@ -11,6 +13,17 @@ class ModificarDatos extends React.Component {
             user: '',
             email: '',
         };
+    }
+
+    componentWillMount() {
+        this.actualizarNombre()
+    }
+
+    actualizarNombre = async () => {
+        var usuario = await Usuario.handleData();
+        this.setState({
+            nombre: usuario.nombre
+        });
     }
 
     async componentDidMount() {
@@ -38,9 +51,9 @@ class ModificarDatos extends React.Component {
     render() {
         return(
             <React.Fragment>
+                <Barra user={this.state.nombre}/><br/>
                 <h1 align="center"> Modificar Datos </h1>
-                <p align="center"> Conectado como: {this.state.user} </p>
-                
+                <br/>
                 <form align="center" onSubmit={this.handleSubmit}>
                     <p> Nueva Contraseña: <input id="Password1" type="password" /> </p>
                     <p> Repite Contraseña: <input id="Password2" type="password" /> </p>
