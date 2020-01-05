@@ -40,7 +40,7 @@ class MostrarPregunta extends React.Component {
             nombre: usuario.nombre,
         });
 
-        this.state.user.on('errorSala', function(valor) {
+        socket.on('errorSala', function(valor) {
             document.getElementById('espera').style.display = "none";
             document.getElementById('timer').style.display = "block";
             document.getElementById('timer').innerHTML = "Esta sala no existe"
@@ -54,7 +54,7 @@ class MostrarPregunta extends React.Component {
         var preg = document.getElementById('pregunta');
         var punt = document.getElementById('puntos')
 
-        this.state.user.on('preguntaEnviada', function(pregunta) {
+        socket.on('preguntaEnviada', function(pregunta) {
             // Ocultar espera
             espera.style.display = "none";
             punt.style.display = "none";
@@ -66,7 +66,7 @@ class MostrarPregunta extends React.Component {
         });
         
         // Al recibir los segundos restantes, actualizar la vista
-        this.state.user.on('segundosRestantes', function(segundos) {
+        socket.on('segundosRestantes', function(segundos) {
             // Cambiar a modo espera si se acaba el tiempo
             if (segundos <= 0) {
                 espera.style.display = "inline";
@@ -90,7 +90,7 @@ class MostrarPregunta extends React.Component {
         })
 
         // Al recibir los nuevos puntos, actualizar la vista
-        this.state.user.on('nuevosPuntos', function(puntos) {
+        socket.on('nuevosPuntos', function(puntos) {
             punt.innerHTML = `Puntos: ${puntos}`;
         })
     }
