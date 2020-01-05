@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import handleRegister from '../../../Controllers/ControllerRegister';
+import Barra from '../Barra';
 
 class Register extends React.Component {
 
@@ -26,7 +27,7 @@ class Register extends React.Component {
     render() {
         return(
             <React.Fragment>
-                
+                <Barra user=""/><br/>
                 <h1 align="center"> Registro </h1>
   
                 <form align="center" id="form" onSubmit={this.handleSubmit}>

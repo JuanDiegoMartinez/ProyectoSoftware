@@ -42,7 +42,7 @@ class ModificarDatos extends React.Component {
         e.preventDefault();
         if(document.getElementById('Password1').value == document.getElementById('Password2').value) {
             await CModificarDatos.handleModifications();
-            document.getElementById('Info').innerHTML = "Cambios realizados satisfactoriamente"
+            document.getElementById('Info').innerHTML = "Cambios realizados"
         } else {
             document.getElementById('Info').innerHTML = "Las contraseñas deben coincidir"
         }

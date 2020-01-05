@@ -43,7 +43,6 @@ class Login extends React.Component {
                 <p align="center" id="info"></p>
                 
                 <p align="center"> <Link to="/Register"> ¿Aún no tienes una cuenta? </Link> </p>
-                <p align="center"> <Link to="/Sala"> Elegir sala (anónimo) </Link> </p>
             </React.Fragment>
         );
     }
